@@ -149,7 +149,9 @@ def test_escape_attempts_blocked(sbx, name, code):
 
 def test_cpu_limit(sbx):
     r = sbx.run("while True: pass")
-    assert not r.ok and (r.signal == "SIGXCPU" or r.timed_out)
+    # SIGXCPU = soft CPU limit; SIGKILL = hard-limit backstop (platform-dependent delivery).
+    assert not r.ok and (r.signal in ("SIGXCPU", "SIGKILL") or r.timed_out)
+    assert r.duration_ms < 10_000  # killed by the CPU limit, not left spinning
 
 
 def test_wall_clock_timeout(sbx):

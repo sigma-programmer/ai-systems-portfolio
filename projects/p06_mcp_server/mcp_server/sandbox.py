@@ -164,7 +164,10 @@ for name, value in cfg["limits"].items():
         continue
     try:
         soft, hard = resource.getrlimit(rl)
-        new_hard = value if hard == resource.RLIM_INFINITY or value <= hard else hard
+        # CPU: soft limit raises SIGXCPU; keep the hard limit 1s higher as a SIGKILL
+        # backstop. With soft == hard, Linux skips SIGXCPU and SIGKILLs immediately.
+        want_hard = value + 1 if name == "RLIMIT_CPU" else value
+        new_hard = want_hard if hard == resource.RLIM_INFINITY or want_hard <= hard else hard
         resource.setrlimit(rl, (min(value, new_hard), new_hard))
         applied[name] = value
     except (ValueError, OSError) as e:
