@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p05 · Durable Agent State Machine</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="p05-durable-agent-state-machine">p05 · Durable Agent State Machine</h1>
+<blockquote>You build agents that survive production failures.</blockquote>
+<h2 id="the-problem">The problem</h2>
+<p>A research agent is four steps into a twenty-minute run when the pod is rescheduled. Restarting from scratch re-charges the card, re-sends the email and re-spends the tokens. Waiting two days for a human approval can't mean holding a process open for two days.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart LR
+    WF[&quot;typed step graph: branches, approval gates&quot;] --&gt; EN[&quot;engine&quot;]
+    EN --&gt;|&quot;one transaction per step&quot;| DB[(&quot;SQLite WAL: append-only events + snapshot + cursor&quot;)]
+    EN --&gt; RT[&quot;retry: exp backoff + full jitter, retryable vs fatal&quot;]
+    RT --&gt;|exhausted| DLQ[&quot;dead letter&quot;]
+    EN --&gt; HG[&quot;approval gate: run suspends durably&quot;]
+    HG --&gt;|&quot;approve / reject from ANY engine&quot;| EN
+    EN --&gt; FX[&quot;side effects keyed run/step/visit/name&quot;]
+    CR[&quot;crash&quot;] -.-&gt; RS[&quot;resume: replay log, verify vs snapshot, continue&quot;]
+    RS --&gt; EN</pre>
+<p>Three rules make it durable:</p>
+<ol><li><strong>Commit, then advance.</strong> A step's event, the state snapshot and the cursor move commit in <em>one</em> SQLite transaction (WAL, <code>synchronous=FULL</code>), so there is no window where the log and the state disagree.</li><li><strong>Replay, don't re-run.</strong> On resume, completed steps return their recorded outputs. The engine refuses to resume if the replayed log disagrees with the snapshot, so it fails loudly instead of continuing with corrupted state.</li><li><strong>Idempotency keys on every side effect.</strong> A crash <em>after</em> an external call but <em>before</em> the commit makes the step re-run. The key <code>run/step/visit/name</code> lets the external system deduplicate the repeated call.</li></ol>
+<h2 id="results-200-workflows-112-injected-crashes-122-injected-transient-failures">Results: 200 workflows, 112 injected crashes, 122 injected transient failures</h2>
+<div class="table-wrap"><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Completion rate</td><td><strong>1.00</strong></td></tr><tr><td>Duplicate side effects</td><td><strong>0</strong> (600 / 600 applied exactly once)</td></tr><tr><td>External calls re-sent after a crash and deduplicated by key</td><td>24</td></tr><tr><td>Mean retries per workflow</td><td>0.61</td></tr><tr><td>Recovery time mean / p95</td><td>~2 ms / ~4 ms</td></tr><tr><td>Checkpoint overhead per step</td><td>~0.2 ms (fsync'd) vs 0.08 ms in-memory</td></tr><tr><td>**Real <code>SIGKILL</code> / <code>os._exit</code> of a worker process**</td><td>3 / 3 completed, 0 duplicates, ~110 ms to resume</td></tr></tbody></table></div>
+<p>The "24 re-sent calls" row is the important one: a crash between an external call and the commit is unavoidable. Exactly-once <em>execution</em> is impossible, so the design target is exactly-once <em>effect</em>, achieved with at-least-once execution plus idempotency keys.</p>
+<h2 id="human-in-the-loop">Human-in-the-loop</h2>
+<p>The sample research agent (plan → search → draft → <strong>human review</strong> → publish → notify) suspends in <code>WAITING_APPROVAL</code>. A <em>different</em> engine instance later approves it, and an unauthorized approver is refused. Approvals that time out escalate. No process stays alive while waiting.</p>
+<h2 id="tradeoffs">Tradeoffs</h2>
+<p>SQLite allows one writer at a time. That is right for an agent control plane (low step rates, strong guarantees, zero ops) and wrong for a high-fan-out job queue. The store sits behind an interface, so moving to Postgres is a change to that one layer. Full <code>fsync</code> roughly triples per-step overhead, which is still under a millisecond and negligible next to a single LLM call.</p>
+<p>See ADR-0006.</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Architecture Decision Records</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="architecture-decision-records">Architecture Decision Records</h1>
+<div class="table-wrap"><table><thead><tr><th>ADR</th><th>Title</th><th>Status</th><th>Projects</th></tr></thead><tbody><tr><td><a href="#adr-0001">0001</a></td><td>Offline-first LLM protocol with deterministic defaults</td><td>Accepted</td><td>all</td></tr><tr><td><a href="#adr-0002">0002</a></td><td>Priority-tiered token budgeting with redistribution</td><td>Accepted</td><td>p01</td></tr><tr><td><a href="#adr-0003">0003</a></td><td>Fuse sparse and dense with RRF, then rerank a bounded candidate pool</td><td>Accepted</td><td>p02, p04</td></tr><tr><td><a href="#adr-0004">0004</a></td><td>Knowledge graph with provenance for multi-hop questions</td><td>Accepted</td><td>p03</td></tr><tr><td><a href="#adr-0005">0005</a></td><td>Ground every claim and abstain below a calibrated confidence</td><td>Accepted</td><td>p04</td></tr><tr><td><a href="#adr-0006">0006</a></td><td>Event-sourced durable execution on SQLite</td><td>Accepted</td><td>p05</td></tr><tr><td><a href="#adr-0007">0007</a></td><td>Implement MCP on raw JSON-RPC with Pydantic-generated schemas</td><td>Accepted</td><td>p06</td></tr><tr><td><a href="#adr-0008">0008</a></td><td>Three memory tiers with importance-weighted recall and TTL eviction</td><td>Accepted</td><td>p07, p01</td></tr><tr><td><a href="#adr-0009">0009</a></td><td>Typed handoffs and execution evidence over opinion in swarm consensus</td><td>Accepted</td><td>p08</td></tr><tr><td><a href="#adr-0010">0010</a></td><td>Gate PRs on trajectory DAG alignment with statistical regression tests</td><td>Accepted</td><td>p09</td></tr><tr><td><a href="#adr-0011">0011</a></td><td>A mediating security proxy between agents, deny-by-default</td><td>Accepted</td><td>p10</td></tr><tr><td><a href="#adr-0012">0012</a></td><td>Complexity routing, semantic caching and degradation chains at the gateway</td><td>Accepted</td><td>p11</td></tr></tbody></table></div>
+<h2 id="adr-0001-offline-first-llm-protocol-with-deterministic-defaults">ADR-0001: Offline-first LLM protocol with deterministic defaults</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> all</p>
+<h3 id="context">Context</h3>
+<p>Every subsystem calls an LLM somewhere (extraction, grading, judging, rewriting). If tests and benchmarks hit a live API they become slow, flaky, expensive and non-reproducible, and CI cannot gate on them. Mocking with canned strings hides whether the surrounding algorithm actually works.</p>
+<h3 id="decision">Decision</h3>
+<p>All projects depend only on a tiny <code>LLM</code> protocol (<code>complete(prompt, system, max_tokens, json_mode) -&gt; LLMResponse</code>) from the shared <code>aikit</code> package. Each LLM-backed step ships two implementations: a genuine algorithmic default (pattern-based extraction, extractive summarization, heuristic judges) and an LLM-backed variant. <code>get_llm()</code> returns <code>ClaudeLLM</code> (claude-opus-5-5, adaptive thinking, server-side refusal fallback) only when credentials exist and <code>AIKIT_OFFLINE</code> is unset.</p>
+<h3 id="consequences">Consequences</h3>
+<p>The entire portfolio runs, tests and benchmarks offline in seconds with fixed seeds, so benchmark fingerprints are reproducible. Offline quality is a floor, not a ceiling: swapping in Claude improves extraction/judging without touching orchestration code. Cost: two implementations per LLM step to maintain.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Recording/replaying real API responses (VCR-style) — brittle when prompts change. Using a local open-weights model — heavy dependency, still non-deterministic. Pure <code>MockLLM</code> canned replies — proves plumbing only, not algorithms.</p>
+<h2 id="adr-0002-priority-tiered-token-budgeting-with-redistribution">ADR-0002: Priority-tiered token budgeting with redistribution</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p01</p>
+<h3 id="context">Context</h3>
+<p>Context windows are large but finite, and quality degrades well before the hard limit (lost-in-the-middle, distraction by low-value retrieval). Naive concatenate-then-truncate drops whatever happens to come last — often the user's query or the newest turns.</p>
+<h3 id="decision">Decision</h3>
+<p>The Context Assembler reserves output tokens first, then satisfies hard-required blocks (system prompt, current query), then allocates the remainder across sources by priority weight within per-source min/max bounds, redistributing unused budget to sources that can use it. Each source declares a compression strategy (truncate, drop-oldest, top-k, summarize). The final render is verified against the window and the invariant is property-tested on randomized inputs.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Overflow is impossible by construction rather than by luck, and every assembly emits a report of what was included, compressed or dropped — making context decisions observable and debuggable. Token counts use a conservative estimator, so a small fraction of the window is left unused.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Fixed per-source quotas (wastes budget when a source is small). Pure recency truncation (drops instructions). Letting the API reject oversize requests and retrying (latency and cost spikes).</p>
+<h2 id="adr-0003-fuse-sparse-and-dense-with-rrf-then-rerank-a-bounded-candidate-pool">ADR-0003: Fuse sparse and dense with RRF, then rerank a bounded candidate pool</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p02, p04</p>
+<h3 id="context">Context</h3>
+<p>BM25 excels at exact identifiers, rare terms and codes; dense retrieval excels at paraphrase and synonymy. Their raw scores live on incomparable scales. Cross-encoder reranking is the most accurate stage but cost scales linearly with candidates.</p>
+<h3 id="decision">Decision</h3>
+<p>Run BM25 and dense search in parallel, apply metadata filters before scoring, fuse with Reciprocal Rank Fusion (k=60) by default (weighted normalized fusion available), and rerank only the top-N fused candidates. N is a tuning knob exposed in the latency/accuracy sweep, which reports a Pareto frontier rather than a single "best" config.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Hybrid recall exceeds either retriever alone on mixed query sets; reranking cost is bounded and predictable. RRF ignores score magnitudes, so a retriever that is very confident gets no extra say — acceptable given its robustness to scale drift.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Dense-only (misses exact-match queries). Learned fusion weights per query type (needs labeled traffic). Reranking the full corpus (accurate, unaffordable).</p>
+<h2 id="adr-0004-knowledge-graph-with-provenance-for-multi-hop-questions">ADR-0004: Knowledge graph with provenance for multi-hop questions</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p03</p>
+<h3 id="context">Context</h3>
+<p>Questions like "Who is the CEO of the company that acquired X?" require joining facts that live in different documents. Vector RAG retrieves chunks similar to the question, but the bridging entity never appears in the question, so the second hop is usually missed.</p>
+<h3 id="decision">Decision</h3>
+<p>Convert unstructured text into a networkx knowledge graph (entities + typed relations), resolving aliases into canonical nodes and storing source-chunk provenance on every node and edge. Local search anchors on question entities and traverses typed paths; global search map-reduces over community summaries produced by modularity-based community detection.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Multi-hop accuracy improves substantially over naive vector RAG on the bundled benchmark, and every answer carries an explainable path with citations. Extraction quality bounds graph quality; the offline pattern extractor has limited recall versus an LLM extractor.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Iterative vector retrieval with query decomposition (works, but more LLM calls and no global view). A graph database (Neo4j) — operational overhead unjustified at this scale.</p>
+<h2 id="adr-0005-ground-every-claim-and-abstain-below-a-calibrated-confidence">ADR-0005: Ground every claim and abstain below a calibrated confidence</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p04</p>
+<h3 id="context">Context</h3>
+<p>The costliest RAG failure is a fluent, confident, wrong answer. Users trust citations, so an answer citing a passage that doesn't support it is worse than no answer.</p>
+<h3 id="decision">Decision</h3>
+<p>Agentic RAG answers sentence-by-sentence with <code>[doc_id]</code> citations; a verifier checks each claim against its cited passage (entity, number and negation consistency). Unsupported claims are repaired or dropped; if the grounding ratio and retrieval evidence combine to a confidence below threshold, the system abstains and states what information is missing. Query rewriting and multi-step retrieval run before abstention is allowed.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Lower answer rate on hard questions, much lower hallucination rate. The abstention threshold is an explicit product knob traded off on the benchmark's answerable/unanswerable split.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Prompting the model to "only use the context" (insufficient on its own). Post-hoc LLM self-critique without citation alignment (cannot localize the unsupported claim).</p>
+<h2 id="adr-0006-event-sourced-durable-execution-on-sqlite">ADR-0006: Event-sourced durable execution on SQLite</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p05</p>
+<h3 id="context">Context</h3>
+<p>Long-running agent workflows (minutes to days, waiting on humans) will see process crashes, deploys and transient API failures. Restarting from scratch duplicates side effects (emails sent twice, tickets filed twice) and wastes tokens.</p>
+<h3 id="decision">Decision</h3>
+<p>Every step transition is appended to an event log and the state snapshot is written in the same SQLite transaction. On resume, completed steps replay their recorded outputs instead of re-executing. Side-effecting steps carry idempotency keys. Retries use exponential backoff with full jitter and a retryable/fatal error taxonomy; exhausted runs go to a dead-letter state. Human approval gates suspend the run durably so any engine instance can resume it.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Crash recovery is verified by killing a real subprocess mid-workflow; side effects execute exactly once. SQLite limits throughput to a single writer — fine for an agent control plane, not for high-fan-out job queues (swap the store interface for Postgres there).</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Temporal / a workflow engine (excellent, but heavy infra for a portfolio and hides the mechanics being demonstrated). In-memory state with periodic snapshots (loses work between snapshots).</p>
+<h2 id="adr-0007-implement-mcp-on-raw-json-rpc-with-pydantic-generated-schemas">ADR-0007: Implement MCP on raw JSON-RPC with Pydantic-generated schemas</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p06</p>
+<h3 id="context">Context</h3>
+<p>SDKs hide protocol details that matter in production: the difference between a JSON-RPC protocol error and a tool execution error, capability negotiation, pagination, and where validation happens. Tool input schemas written by hand drift from the code that consumes them.</p>
+<h3 id="decision">Decision</h3>
+<p>Implement JSON-RPC 2.0 and the MCP lifecycle directly (stdio and HTTP transports). Tools are registered with a Pydantic v2 model (<code>extra=&quot;forbid&quot;</code>) whose JSON Schema becomes <code>inputSchema</code>; malformed params map to -32602, while failures inside a tool return a result with <code>isError: true</code> so the model can self-correct. Tools declare required scopes; <code>tools/list</code> only shows what the caller may call. Filesystem tools are jailed to a root; code execution runs in an isolated subprocess with rlimits, timeout, empty env and output caps.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Full control and auditability of the wire protocol with zero SDK dependency. We own spec conformance and must track protocol revisions ourselves.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Official MCP SDK (faster to build, less instructive, extra dependency). Hand-written JSON Schemas (drift risk).</p>
+<h2 id="adr-0008-three-memory-tiers-with-importance-weighted-recall-and-ttl-eviction">ADR-0008: Three memory tiers with importance-weighted recall and TTL eviction</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p07, p01</p>
+<h3 id="context">Context</h3>
+<p>Stuffing whole transcripts into context does not scale across sessions; a single vector store of every utterance recalls noise and stale facts ("I live in Paris" after the user moved).</p>
+<h3 id="decision">Decision</h3>
+<p>Working memory is a token-bounded scratchpad; overflow is compressed into episodic memory (session summaries); a consolidation pass distils semantic facts with supersession (newer contradicting facts replace older ones). Recall scores items by embedding similarity × importance × recency decay, across tiers. Each tier has its own TTL/decay. Everything persists in SQLite so a fresh process recalls prior sessions.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Bounded storage and context cost per user, recall dominated by salient and current facts. Importance weights are heuristic and tuned on a scripted benchmark rather than learned.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Full-transcript retrieval only (noisy, unbounded). Pure summarization chains (lose specific facts). Fact extraction only (loses narrative context).</p>
+<h2 id="adr-0009-typed-handoffs-and-execution-evidence-over-opinion-in-swarm-consensus">ADR-0009: Typed handoffs and execution evidence over opinion in swarm consensus</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p08</p>
+<h3 id="context">Context</h3>
+<p>Multi-agent systems fail silently at handoffs (a malformed message propagates) and in review (agents agreeing with each other without evidence). A single faulty reviewer can flip a decision.</p>
+<h3 id="decision">Decision</h3>
+<p>All handoffs are Pydantic models validated at the boundary, and the topology graph is type-checked when built (an edge whose output type doesn't match the consumer's input is rejected). Invalid outputs trigger structured repair/retry. Reviewers execute generated code against tests in a sandboxed subprocess; consensus supports majority, weighted and quorum rules, and conflicts are broken by evidence strength — test execution beats opinion — before escalating to the supervisor.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Wiring errors surface at build time, not mid-run; consensus stays correct with one adversarial reviewer. Extra reviewers cost tokens and wall time, quantified in the benchmark.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Free-text message passing (fragile). Single reviewer (single point of failure). Pure LLM-vote consensus (correlated errors).</p>
+<h2 id="adr-0010-gate-prs-on-trajectory-dag-alignment-with-statistical-regression-tests">ADR-0010: Gate PRs on trajectory DAG alignment with statistical regression tests</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p09</p>
+<h3 id="context">Context</h3>
+<p>Final-answer evals miss agents that get the right answer the wrong way (skipping an authorization check, calling a forbidden tool, looping). Agent runs are noisy, so naive threshold comparisons block good PRs and pass bad ones.</p>
+<h3 id="decision">Decision</h3>
+<p>Golden behaviours are DAGs of required, optional and forbidden steps with partial order and argument matchers. Candidate trajectories are aligned to the DAG and graded step-by-step (rules + LLM-as-judge). The judge is calibrated against human labels (agreement and Cohen's kappa reported before/after). The CI gate compares candidate vs. baseline suites with bootstrap/permutation tests and blocks the PR (non-zero exit + markdown comment) only on statistically significant regressions or hard-policy violations.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Process regressions are caught even when answers still look right; noise-only changes don't block merges. Golden DAGs must be maintained as the agent legitimately evolves.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Exact trajectory matching (too brittle). Answer-only evals (miss process failures). Uncalibrated LLM judges (unknown error rate).</p>
+<h2 id="adr-0011-a-mediating-security-proxy-between-agents-deny-by-default">ADR-0011: A mediating security proxy between agents, deny-by-default</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p10</p>
+<h3 id="context">Context</h3>
+<p>In multi-agent systems, one agent's output is another's input. A compromised or manipulated agent (e.g. via a poisoned web page) can inject instructions, exfiltrate PII, or request tools it should never use.</p>
+<h3 id="decision">Decision</h3>
+<p>All inter-agent traffic passes a proxy that: masks PII with stable per-session UUID tokens (reversible only for authorized recipients); detects prompt injection with layered rules, decoding of obfuscations (base64, hex, zero-width, unicode tags) and a scoring model, optionally an LLM classifier; wraps untrusted content in data delimiters; enforces least-privilege tool grants where delegation can only attenuate capabilities; and writes a hash-chained, tamper-evident audit log.</p>
+<h3 id="consequences">Consequences</h3>
+<p>Measurable precision/recall on bundled attack and benign corpora; every decision is auditable. Pattern-based detection cannot catch every novel attack — the proxy is one layer, combined with capability limits that bound the blast radius when detection fails.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Relying on model refusals alone (not a security boundary). Per-agent ad hoc filtering (inconsistent, unauditable).</p>
+<h2 id="adr-0012-complexity-routing-semantic-caching-and-degradation-chains-at-the-gateway">ADR-0012: Complexity routing, semantic caching and degradation chains at the gateway</h2>
+<p><strong>Status:</strong> Accepted · <strong>Date:</strong> 2026-11-19 · <strong>Projects:</strong> p11</p>
+<h3 id="context">Context</h3>
+<p>Sending every request to the most capable model is the simplest policy and the most expensive. Many requests are simple or repeated paraphrases. Provider incidents and spend runaways must degrade service, not take it down or drain the budget.</p>
+<h3 id="decision">Decision</h3>
+<p>A gateway scores prompt complexity (entropy, length, lexical diversity, reasoning and code signals) and routes to Haiku / Sonnet / Opus tiers. A semantic cache with tenant isolation, TTL and LRU returns prior answers for near-duplicate prompts, with guards against false hits when numbers or negations differ. Per-tenant budgets and spend-rate circuit breakers act as kill-switches. Each tier has a fallback chain with per-backend circuit breakers.</p>
+<h3 id="consequences">Consequences</h3>
+<p>40-60%+ cost reduction versus always-Opus on the replayed workload, with cache false-hit rate tracked as a first-class metric. Misrouting a hard prompt to a small model is the main quality risk, mitigated by conservative thresholds.</p>
+<h3 id="alternatives-considered">Alternatives Considered</h3>
+<p>Always use the best model (simple, expensive). Exact-match caching only (low hit rate). Provider-side routing only (no tenant budgets or cross-provider fallback).</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

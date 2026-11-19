@@ -1,0 +1,642 @@
+[
+{
+"run_id": "labeled-code_fix-000",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-001",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-002",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-003",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-004",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-005",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-006",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-007",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-008",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-009",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-010",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-011",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-012",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-013",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-014",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-015",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-016",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-017",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-018",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-019",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-020",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-021",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-022",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-023",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-024",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-025",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-026",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-027",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-028",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-029",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-030",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-031",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-032",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-033",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-034",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-035",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-036",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-037",
+"label": 0
+},
+{
+"run_id": "labeled-code_fix-038",
+"label": 1
+},
+{
+"run_id": "labeled-code_fix-039",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-000",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-001",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-002",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-003",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-004",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-005",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-006",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-007",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-008",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-009",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-010",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-011",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-012",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-013",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-014",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-015",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-016",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-017",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-018",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-019",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-020",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-021",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-022",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-023",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-024",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-025",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-026",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-027",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-028",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-029",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-030",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-031",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-032",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-033",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-034",
+"label": 0
+},
+{
+"run_id": "labeled-refund_request-035",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-036",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-037",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-038",
+"label": 1
+},
+{
+"run_id": "labeled-refund_request-039",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-000",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-001",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-002",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-003",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-004",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-005",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-006",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-007",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-008",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-009",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-010",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-011",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-012",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-013",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-014",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-015",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-016",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-017",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-018",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-019",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-020",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-021",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-022",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-023",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-024",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-025",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-026",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-027",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-028",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-029",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-030",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-031",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-032",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-033",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-034",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-035",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-036",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-037",
+"label": 0
+},
+{
+"run_id": "labeled-research_summary-038",
+"label": 1
+},
+{
+"run_id": "labeled-research_summary-039",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-000",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-001",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-002",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-003",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-004",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-005",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-006",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-007",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-008",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-009",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-010",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-011",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-012",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-013",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-014",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-015",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-016",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-017",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-018",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-019",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-020",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-021",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-022",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-023",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-024",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-025",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-026",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-027",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-028",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-029",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-030",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-031",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-032",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-033",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-034",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-035",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-036",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-037",
+"label": 0
+},
+{
+"run_id": "labeled-trip_planner-038",
+"label": 1
+},
+{
+"run_id": "labeled-trip_planner-039",
+"label": 0
+}
+]

@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p09 · Trajectory Eval CI Gate</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="p09-trajectory-eval-ci-gate">p09 · Trajectory Eval CI Gate</h1>
+<blockquote>You grade the journey, not just the answer.</blockquote>
+<h2 id="the-problem">The problem</h2>
+<p>An agent that refunds the right order <em>without checking authorization</em> passes an answer-only eval. And agent runs are noisy, so a naive "mean score dropped" gate blocks half your PRs for nothing.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart LR
+    G[&quot;golden DAG: required / optional / forbidden steps, partial order, arg matchers&quot;] --&gt; AL
+    T[&quot;candidate trajectories&quot;] --&gt; AL[&quot;alignment: coverage, order violations, extras, loops&quot;]
+    AL --&gt; SG[&quot;step graders: rules + LLM judge&quot;]
+    SG --&gt; CAL[&quot;judge calibration vs human labels&quot;]
+    CAL --&gt; ST[&quot;suite stats: bootstrap / permutation vs baseline&quot;]
+    ST --&gt; GATE{&quot;policy&quot;}
+    GATE --&gt;|pass| OK[&quot;exit 0&quot;]
+    GATE --&gt;|significant regression| BLOCK[&quot;exit 1 + markdown PR comment&quot;]</pre>
+<p>The CLI (<code>python -m trajectory_eval gate --baseline … --candidate … --policy …</code>) ships with a GitHub Actions workflow in <code>ci/</code>.</p>
+<h2 id="results">Results</h2>
+<p><strong>Grading:</strong> 200 trajectories (1,936 steps) at about 11k trajectories/s. DAG alignment agrees with ground truth 100% of the time.</p>
+<p><strong>Judge calibration</strong> (160 human labels, 5-fold cross-validated):</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Before</th><th>After Platt</th><th>After isotonic</th></tr></thead><tbody><tr><td>Cohen's κ</td><td>0.00</td><td>0.53</td><td>0.53</td></tr><tr><td>Accuracy</td><td>0.44</td><td>0.76</td><td>0.76</td></tr><tr><td>ECE</td><td>0.45</td><td>0.11</td><td>0.11</td></tr></tbody></table></div>
+<p>The raw heuristic judge scores <em>everything</em> high (mean 0.95 on good steps, 0.85 on bad), so at a naive 0.5 threshold its agreement is chance-level. The signal is there, but the scale is wrong. Calibration is what makes a judge usable, and it can only be done against human labels.</p>
+<p><strong>Regression detection</strong> (64 scenarios: 32 noise-only, 32 with an injected regression, 80 runs per suite):</p>
+<div class="table-wrap"><table><thead><tr><th>Gate</th><th>Precision</th><th>Recall</th><th>False-positive rate</th></tr></thead><tbody><tr><td>Naive mean-delta threshold</td><td>0.67</td><td>1.00</td><td><strong>0.50</strong></td></tr><tr><td>Statistical gate</td><td><strong>1.00</strong></td><td>0.94</td><td><strong>0.00</strong></td></tr></tbody></table></div>
+<p>The naive gate would block half of all harmless PRs. The statistical gate never does, and it misses 2 of 32 injected regressions; both are "forbidden action" injections that occur in only a small fraction of runs (recall 0.75 for that class). <strong>Hard-policy rules (any forbidden tool call → block) exist precisely for that class</strong>: some regressions must block on a single occurrence, not on statistics.</p>
+<p>See ADR-0010.</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

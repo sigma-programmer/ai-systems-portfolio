@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p04 · Self-Correcting Agentic RAG</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="p04-self-correcting-agentic-rag">p04 · Self-Correcting Agentic RAG</h1>
+<blockquote>You can stop RAG from confidently lying.</blockquote>
+<h2 id="the-problem">The problem</h2>
+<p>A RAG system that answers every question will confidently answer the ones its corpus can't support. Users trust citations, so a citation that doesn't support its sentence is worse than no answer at all.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart TB
+    Q[&quot;question&quot;] --&gt; RW[&quot;rewrite / decompose&quot;]
+    RW --&gt; RET[&quot;hybrid retrieve (BM25 + dense)&quot;]
+    RET --&gt; GR[&quot;grade passages&quot;]
+    GR --&gt;|insufficient, steps left| RW
+    GR --&gt; GEN[&quot;generate: sentences with doc_id citations&quot;]
+    GEN --&gt; V[&quot;verify each claim vs its cited passage&quot;]
+    V --&gt;|unsupported claim| REP[&quot;repair: drop or regenerate&quot;]
+    REP --&gt; V
+    V --&gt; CONF[&quot;confidence = retrieval evidence x grounding ratio&quot;]
+    CONF --&gt;|below threshold| ABS[&quot;abstain + explain what&#x27;s missing&quot;]
+    CONF --&gt; ANS[&quot;grounded answer + trace&quot;]</pre>
+<p>The claim verifier checks entity, number, unit and negation consistency between each sentence and its cited passage. The benchmark injects a deliberately hallucinating generator to test the verifier, not just the happy path.</p>
+<h2 id="results-48-questions-24-answerable-12-unanswerable-12-adversarial-5-runs">Results (48 questions: 24 answerable, 12 unanswerable, 12 adversarial × 5 runs)</h2>
+<div class="table-wrap"><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Answer accuracy (answerable)</td><td>1.00</td></tr><tr><td>Abstention precision / recall (unanswerable)</td><td>1.00 / 1.00</td></tr><tr><td>Citation precision</td><td>1.00</td></tr><tr><td>Hallucination catch rate (140 injected claims)</td><td><strong>1.00</strong></td></tr><tr><td>Hallucinations leaked to final answer</td><td><strong>0</strong></td></tr><tr><td>Accuracy after repair under adversarial generator</td><td>0.983</td></tr><tr><td>Confidence Brier score</td><td>0.0011</td></tr><tr><td>False-flag rate on <em>paraphrased</em> true claims</td><td><strong>0.158</strong></td></tr><tr><td>Avg retrieval steps / rewrites issued</td><td>1.67 / 24</td></tr></tbody></table></div>
+<p>The verifier catches all six mutation types: entity swap, number swap, unit swap, negation flip, mis-citation and fabrication.</p>
+<h2 id="the-weak-spot-and-why-it-s-the-right-one">The weak spot, and why it's the right one</h2>
+<p>The verifier is lexical. When a true claim is heavily paraphrased, it fails about 16% of the time, and the system then repairs or drops a correct sentence. That is a deliberate asymmetry: <strong>a false flag costs some recall, a missed hallucination costs trust.</strong> Final answer accuracy on the paraphrase runs still recovers to 1.0 after repair. In production, the LLM-backed verifier (same interface) closes most of that gap.</p>
+<h2 id="caveat">Caveat</h2>
+<p>The corpus and question set are synthetic and built to exercise each failure mode, which is why most scores are 1.0. The useful output is the <em>mechanism</em>: every claim is checked, every abstention is explained, and every step lands in a trace.</p>
+<p>See ADR-0005.</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

@@ -1,0 +1,74 @@
+# Example GitHub Actions workflow: block PRs whose agent trajectories regress.
+# Copy to .github/workflows/trajectory-gate.yml at the repository root.
+#
+# The candidate suite is produced by running your agent on the eval task set
+# (replace the "Run agent eval suite" step with your own harness); the
+# baseline is the suite recorded on the default branch.
+name: trajectory-gate
+
+on:
+  pull_request:
+    paths:
+      - "agent/**"
+      - "prompts/**"
+      - "projects/p09_trajectory_eval/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    env:
+      AIKIT_OFFLINE: "1"
+      PYTHONPATH: common:projects/p09_trajectory_eval
+      DATA: projects/p09_trajectory_eval/trajectory_eval/data
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install "numpy>=1.26" "networkx>=3.2" "pydantic>=2.6"
+
+      - name: Run agent eval suite
+        # Replace with your harness, e.g. `python -m my_agent.eval --out candidate.json`.
+        run: cp "$DATA/suites/candidate_ok.json" candidate.json
+
+      - name: Trajectory gate
+        id: gate
+        run: |
+          set +e
+          python -m trajectory_eval gate \
+            --baseline "$DATA/suites/baseline.json" \
+            --candidate candidate.json \
+            --policy "$DATA/policy.json" \
+            --goldens "$DATA/golden" \
+            --report gate_report.md \
+            --json gate_result.json
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Upload gate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trajectory-gate
+          path: |
+            gate_report.md
+            gate_result.json
+
+      - name: Comment on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: trajectory-gate
+          path: gate_report.md
+
+      - name: Enforce gate
+        if: steps.gate.outputs.exit_code != '0'
+        run: |
+          echo "Trajectory gate blocked this PR (exit ${{ steps.gate.outputs.exit_code }})."
+          exit 1

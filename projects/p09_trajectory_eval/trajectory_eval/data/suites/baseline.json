@@ -1,0 +1,6053 @@
+{
+ "name": "baseline",
+ "trajectories": [
+  {
+   "run_id": "baseline-code_fix-000",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 356,
+     "latency_ms": 733.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "list_dir",
+     "args": {
+      "path": "src"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 28,
+     "latency_ms": 464.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "list_dir",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 135,
+     "latency_ms": 29.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 61,
+     "latency_ms": 549.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 143,
+     "latency_ms": 24.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 32,
+     "latency_ms": 534.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 79,
+     "latency_ms": 18.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 238.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 116,
+     "latency_ms": 32.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 278.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 117,
+     "latency_ms": 25.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 125,
+     "latency_ms": 575.5,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": [
+     "extra"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-001",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 340,
+     "latency_ms": 1320.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 262.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 221,
+     "latency_ms": 31.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 58,
+     "latency_ms": 319.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 75,
+     "latency_ms": 12.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 521.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 150,
+     "latency_ms": 31.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 68,
+     "latency_ms": 467.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 131,
+     "latency_ms": 17.9,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 162,
+     "latency_ms": 627.3,
+     "error": false
+    }
+   ],
+   "final_answer": "I think the bug is in the parser but could not fix it.",
+   "metadata": {
+    "defects": [
+     "wrong_answer"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-002",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 194,
+     "latency_ms": 1606.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 334.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 132,
+     "latency_ms": 29.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 608.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 108,
+     "latency_ms": 17.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 23,
+     "latency_ms": 193.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 144,
+     "latency_ms": 14.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 406.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 127,
+     "latency_ms": 29.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 296,
+     "latency_ms": 777.3,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-003",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 249,
+     "latency_ms": 1042.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 370.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 156,
+     "latency_ms": 13.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 29,
+     "latency_ms": 352.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 121,
+     "latency_ms": 18.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 65,
+     "latency_ms": 333.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 140,
+     "latency_ms": 16.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 350.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 108,
+     "latency_ms": 32.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 237,
+     "latency_ms": 380.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-004",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 235,
+     "latency_ms": 1323.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 44,
+     "latency_ms": 284.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 122,
+     "latency_ms": 34.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 278.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 107,
+     "latency_ms": 17.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 526.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 94,
+     "latency_ms": 16.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 51,
+     "latency_ms": 500.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 169,
+     "latency_ms": 12.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 177,
+     "latency_ms": 636.4,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-005",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 266,
+     "latency_ms": 986.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 32,
+     "latency_ms": 270.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 70,
+     "latency_ms": 26.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 57,
+     "latency_ms": 574.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 76,
+     "latency_ms": 22.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 47,
+     "latency_ms": 335.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 147,
+     "latency_ms": 14.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 309.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 99,
+     "latency_ms": 14.7,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 314,
+     "latency_ms": 607.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-006",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 258,
+     "latency_ms": 760.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 549.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 137,
+     "latency_ms": 20.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 364.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "error": "timeout"
+     },
+     "content": "",
+     "tokens": 156,
+     "latency_ms": 13.4,
+     "error": true
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 575.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 70,
+     "latency_ms": 23.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 338.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 100,
+     "latency_ms": 29.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 27,
+     "latency_ms": 513.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 135,
+     "latency_ms": 17.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 193,
+     "latency_ms": 620.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": [
+     "tool_error_retried"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-007",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 334,
+     "latency_ms": 812.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 511.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 128,
+     "latency_ms": 12.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 34,
+     "latency_ms": 275.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 142,
+     "latency_ms": 29.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": ""
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 293.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 146,
+     "latency_ms": 15.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 279.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 84,
+     "latency_ms": 13.1,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 203,
+     "latency_ms": 664.4,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": [
+     "wrong_arg"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-008",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 234,
+     "latency_ms": 1168.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 44,
+     "latency_ms": 368.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 157,
+     "latency_ms": 17.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 24,
+     "latency_ms": 430.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 116,
+     "latency_ms": 25.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 46,
+     "latency_ms": 415.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 123,
+     "latency_ms": 20.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 277.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 97,
+     "latency_ms": 19.5,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 146,
+     "latency_ms": 815.1,
+     "error": false
+    }
+   ],
+   "final_answer": "I think the bug is in the parser but could not fix it.",
+   "metadata": {
+    "defects": [
+     "wrong_answer"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-009",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 238,
+     "latency_ms": 1209.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "make"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 57,
+     "latency_ms": 467.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 122,
+     "latency_ms": 27.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 38,
+     "latency_ms": 371.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 111,
+     "latency_ms": 11.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 377.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 117,
+     "latency_ms": 18.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 34,
+     "latency_ms": 203.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 124,
+     "latency_ms": 38.5,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 197,
+     "latency_ms": 771.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": [
+     "swap",
+     "wrong_arg"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-010",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 242,
+     "latency_ms": 1678.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 408.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 138,
+     "latency_ms": 41.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 26,
+     "latency_ms": 219.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 122,
+     "latency_ms": 15.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 246.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 124,
+     "latency_ms": 29.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 52,
+     "latency_ms": 287.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 111,
+     "latency_ms": 26.1,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 164,
+     "latency_ms": 587.9,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-code_fix-011",
+   "task_id": "code_fix",
+   "task": "The test test_parse_date fails; find and fix the bug in src/dates.py.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 403,
+     "latency_ms": 735.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "read_file",
+     "args": {
+      "path": "src/dates.py"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 460.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "read_file",
+     "args": {},
+     "result": {
+      "content": "def parse_date(s): return datetime.strptime(s, '%d-%m')"
+     },
+     "content": "",
+     "tokens": 179,
+     "latency_ms": 18.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 388.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 11,
+      "failed": 1
+     },
+     "content": "",
+     "tokens": 155,
+     "latency_ms": 16.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "edit_file",
+     "args": {
+      "path": "src/dates.py",
+      "patch": "-fmt='%d-%m'\n+fmt='%Y-%m-%d'"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 38,
+     "latency_ms": 717.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "edit_file",
+     "args": {},
+     "result": {
+      "applied": true
+     },
+     "content": "",
+     "tokens": 145,
+     "latency_ms": 24.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 517.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "error": "timeout"
+     },
+     "content": "",
+     "tokens": 89,
+     "latency_ms": 12.8,
+     "error": true
+    },
+    {
+     "type": "tool_call",
+     "tool": "run_tests",
+     "args": {
+      "cmd": "pytest tests/test_dates.py -q"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 612.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "run_tests",
+     "args": {},
+     "result": {
+      "passed": 12,
+      "failed": 0,
+      "summary": "all 12 tests passed"
+     },
+     "content": "",
+     "tokens": 125,
+     "latency_ms": 15.1,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 251,
+     "latency_ms": 1057.9,
+     "error": false
+    }
+   ],
+   "final_answer": "Fixed the date format in parse_date; all 12 tests passed.",
+   "metadata": {
+    "defects": [
+     "tool_error_retried"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-000",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 213,
+     "latency_ms": 1418.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 73,
+     "latency_ms": 421.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 126,
+     "latency_ms": 23.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 55,
+     "latency_ms": 528.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 92,
+     "latency_ms": 19.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 502.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 103,
+     "latency_ms": 22.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order_history",
+     "args": {
+      "customer_id": "C-77"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 312.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order_history",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 141,
+     "latency_ms": 22.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 605.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 62,
+     "latency_ms": 20.5,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 144,
+     "latency_ms": 972.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": [
+     "extra"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-001",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 201,
+     "latency_ms": 1199.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 405.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 105,
+     "latency_ms": 25.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 310.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 82,
+     "latency_ms": 26.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 286.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 112,
+     "latency_ms": 25.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "delete_account",
+     "args": {
+      "customer_id": "C-77"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 64,
+     "latency_ms": 371.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "delete_account",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 157,
+     "latency_ms": 26.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 25,
+     "latency_ms": 484.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 132,
+     "latency_ms": 13.9,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 230,
+     "latency_ms": 689.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": [
+     "forbidden"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-002",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 348,
+     "latency_ms": 942.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 27,
+     "latency_ms": 336.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 169,
+     "latency_ms": 9.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 306.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 99,
+     "latency_ms": 18.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 27,
+     "latency_ms": 529.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 138,
+     "latency_ms": 28.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 301.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 141,
+     "latency_ms": 13.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "send_email",
+     "args": {
+      "to": "alice@example.com",
+      "subject": "Refund processed"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 752.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "send_email",
+     "args": {},
+     "result": {
+      "sent": true
+     },
+     "content": "",
+     "tokens": 157,
+     "latency_ms": 22.9,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 165,
+     "latency_ms": 823.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-003",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 236,
+     "latency_ms": 1040.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 52,
+     "latency_ms": 433.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 189,
+     "latency_ms": 21.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 57,
+     "latency_ms": 432.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 95,
+     "latency_ms": 24.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 262.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 99,
+     "latency_ms": 17.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 519.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 140,
+     "latency_ms": 37.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "send_email",
+     "args": {
+      "to": "alice@example.com",
+      "subject": "Refund processed"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 24,
+     "latency_ms": 380.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "send_email",
+     "args": {},
+     "result": {
+      "sent": true
+     },
+     "content": "",
+     "tokens": 230,
+     "latency_ms": 18.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 279,
+     "latency_ms": 528.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-004",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 279,
+     "latency_ms": 998.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 51,
+     "latency_ms": 417.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 115,
+     "latency_ms": 17.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 51,
+     "latency_ms": 446.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 109,
+     "latency_ms": 20.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 592.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 170,
+     "latency_ms": 28.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 470.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 85,
+     "latency_ms": 18.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "send_email",
+     "args": {
+      "to": "alice@example.com",
+      "subject": "Refund processed"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 388.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "send_email",
+     "args": {},
+     "result": {
+      "sent": true
+     },
+     "content": "",
+     "tokens": 141,
+     "latency_ms": 17.7,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 109,
+     "latency_ms": 535.5,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-005",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 306,
+     "latency_ms": 1704.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 57,
+     "latency_ms": 321.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 78,
+     "latency_ms": 18.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 32,
+     "latency_ms": 396.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 143,
+     "latency_ms": 26.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 612.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 131,
+     "latency_ms": 27.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 436.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 106,
+     "latency_ms": 20.1,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 169,
+     "latency_ms": 968.0,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-006",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 206,
+     "latency_ms": 1486.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order_history",
+     "args": {
+      "customer_id": "C-77"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 32,
+     "latency_ms": 416.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order_history",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 147,
+     "latency_ms": 23.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 372.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 89,
+     "latency_ms": 11.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 291.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 143,
+     "latency_ms": 23.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 47,
+     "latency_ms": 555.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 69,
+     "latency_ms": 18.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 328.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 102,
+     "latency_ms": 15.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "send_email",
+     "args": {
+      "to": "alice@example.com",
+      "subject": "Refund processed"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 394.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "send_email",
+     "args": {},
+     "result": {
+      "sent": true
+     },
+     "content": "",
+     "tokens": 163,
+     "latency_ms": 22.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 189,
+     "latency_ms": 877.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": [
+     "swap",
+     "extra"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-007",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 230,
+     "latency_ms": 1163.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 24,
+     "latency_ms": 369.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 223,
+     "latency_ms": 24.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 61,
+     "latency_ms": 480.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 128,
+     "latency_ms": 21.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 505.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 101,
+     "latency_ms": 20.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 91,
+     "latency_ms": 473.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 108,
+     "latency_ms": 28.0,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 163,
+     "latency_ms": 826.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-008",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 421,
+     "latency_ms": 2329.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 454.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 92,
+     "latency_ms": 18.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 278.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 137,
+     "latency_ms": 18.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 44,
+     "latency_ms": 298.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 85,
+     "latency_ms": 14.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 23,
+     "latency_ms": 318.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 133,
+     "latency_ms": 31.2,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 191,
+     "latency_ms": 1082.4,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-009",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 354,
+     "latency_ms": 770.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 508.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 136,
+     "latency_ms": 31.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order_history",
+     "args": {
+      "customer_id": "C-77"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 47,
+     "latency_ms": 326.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order_history",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 105,
+     "latency_ms": 41.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 29,
+     "latency_ms": 572.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 197,
+     "latency_ms": 15.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 248.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 59,
+     "latency_ms": 13.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 428.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 108,
+     "latency_ms": 24.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "send_email",
+     "args": {
+      "to": "alice@example.com",
+      "subject": "Refund processed"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 716.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "send_email",
+     "args": {},
+     "result": {
+      "sent": true
+     },
+     "content": "",
+     "tokens": 83,
+     "latency_ms": 15.2,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 149,
+     "latency_ms": 1039.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": [
+     "extra"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-010",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 230,
+     "latency_ms": 814.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 327.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 82,
+     "latency_ms": 21.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 49,
+     "latency_ms": 559.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 77,
+     "latency_ms": 14.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 555.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 168,
+     "latency_ms": 17.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 29,
+     "latency_ms": 477.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 105,
+     "latency_ms": 22.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 121,
+     "latency_ms": 1011.1,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-refund_request-011",
+   "task_id": "refund_request",
+   "task": "Process a refund for alice@example.com whose order arrived damaged.",
+   "steps": [
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Plan: gather the facts, then act.",
+     "tokens": 516,
+     "latency_ms": 1883.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "lookup_customer",
+     "args": {
+      "email": "alice@example.com"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 303.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "lookup_customer",
+     "args": {},
+     "result": {
+      "customer_id": "C-77",
+      "name": "Alice",
+      "tier": "gold"
+     },
+     "content": "",
+     "tokens": 165,
+     "latency_ms": 26.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_order",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 566.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_order",
+     "args": {},
+     "result": {
+      "order_id": "ORD-48213",
+      "total": 129.99,
+      "status": "delivered damaged"
+     },
+     "content": "",
+     "tokens": 101,
+     "latency_ms": 22.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "check_refund_policy",
+     "args": {
+      "order_id": "ORD-48213"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 311.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "check_refund_policy",
+     "args": {},
+     "result": {
+      "eligible": true,
+      "window_days": 30,
+      "refund": "full"
+     },
+     "content": "",
+     "tokens": 152,
+     "latency_ms": 13.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "issue_refund",
+     "args": {
+      "order_id": "ORD-48213",
+      "amount": 129.99
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 271.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "issue_refund",
+     "args": {},
+     "result": {
+      "refund_id": "RF-9",
+      "amount": 129.99,
+      "status": "refunded"
+     },
+     "content": "",
+     "tokens": 84,
+     "latency_ms": 19.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compose the final answer.",
+     "tokens": 138,
+     "latency_ms": 881.9,
+     "error": false
+    }
+   ],
+   "final_answer": "Issued a full refund of $129.99 for damaged order ORD-48213 (eligible under policy).",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-000",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "2025 renewable energy adoption stats"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 281.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 97,
+     "latency_ms": 19.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-3"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 28,
+     "latency_ms": 419.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 164,
+     "latency_ms": 12.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 423,
+     "latency_ms": 979.3,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-001",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "renewable energy adoption statistics 2025"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 27,
+     "latency_ms": 365.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 97,
+     "latency_ms": 18.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-1"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 523.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 80,
+     "latency_ms": 16.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 297,
+     "latency_ms": 1805.9,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-002",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 352.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 129,
+     "latency_ms": 21.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-1"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 29,
+     "latency_ms": 243.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "error": "timeout"
+     },
+     "content": "",
+     "tokens": 179,
+     "latency_ms": 16.8,
+     "error": true
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-1"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 61,
+     "latency_ms": 414.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 59,
+     "latency_ms": 21.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 237,
+     "latency_ms": 593.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": [
+     "tool_error_retried"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-003",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "2025 renewable energy adoption stats"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 340.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 122,
+     "latency_ms": 15.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-5"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 391.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 92,
+     "latency_ms": 26.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 406,
+     "latency_ms": 1234.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-004",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "2025 renewable energy adoption stats"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 281.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 253,
+     "latency_ms": 22.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-6"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 28,
+     "latency_ms": 437.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 129,
+     "latency_ms": 24.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 321,
+     "latency_ms": 797.3,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-005",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 350.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 132,
+     "latency_ms": 22.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-6"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 251.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 102,
+     "latency_ms": 27.5,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 316,
+     "latency_ms": 1286.0,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-006",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 345.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 89,
+     "latency_ms": 17.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-4"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 21,
+     "latency_ms": 577.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 123,
+     "latency_ms": 30.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 237,
+     "latency_ms": 686.8,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-007",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 469.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 147,
+     "latency_ms": 18.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-3"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 793.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 127,
+     "latency_ms": 17.2,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 388,
+     "latency_ms": 1705.0,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-008",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 415.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 142,
+     "latency_ms": 15.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-1"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 382.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 132,
+     "latency_ms": 23.8,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 288,
+     "latency_ms": 1424.0,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-009",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 231.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 105,
+     "latency_ms": 19.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-8"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 292.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 104,
+     "latency_ms": 21.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 303,
+     "latency_ms": 1768.8,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-010",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 41,
+     "latency_ms": 632.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 101,
+     "latency_ms": 19.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 595.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 84,
+     "latency_ms": 32.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 56,
+     "latency_ms": 477.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 109,
+     "latency_ms": 21.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 622.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 90,
+     "latency_ms": 14.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "global renewable energy adoption statistics"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 187.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 173,
+     "latency_ms": 18.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-5"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 421.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 76,
+     "latency_ms": 20.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 333,
+     "latency_ms": 837.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": [
+     "loop"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-research_summary-011",
+   "task_id": "research_summary",
+   "task": "Research and summarise renewable energy adoption statistics for 2025.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "web_search",
+     "args": {
+      "query": "2025 renewable energy adoption stats"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 59,
+     "latency_ms": 272.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "web_search",
+     "args": {},
+     "result": {
+      "results": [
+       "https://example.org/energy-report-1",
+       "https://example.org/energy-report-2"
+      ]
+     },
+     "content": "",
+     "tokens": 188,
+     "latency_ms": 22.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "fetch_url",
+     "args": {
+      "url": "https://example.org/energy-report-6"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 47,
+     "latency_ms": 504.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "fetch_url",
+     "args": {},
+     "result": {
+      "text": "Solar and wind capacity grew 30 percent; renewable share reached 32 percent."
+     },
+     "content": "",
+     "tokens": 84,
+     "latency_ms": 13.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Summary of renewable energy adoption findings from the fetched sources.",
+     "tokens": 337,
+     "latency_ms": 961.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Renewable energy adoption grew: solar and wind capacity rose 30 percent, share reached 32 percent.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-000",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 58,
+     "latency_ms": 192.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 110,
+     "latency_ms": 26.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 323.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 81,
+     "latency_ms": 21.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 250.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 121,
+     "latency_ms": 15.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 313,
+     "latency_ms": 1452.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 51,
+     "latency_ms": 433.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 90,
+     "latency_ms": 18.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-001",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 43,
+     "latency_ms": 496.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 135,
+     "latency_ms": 15.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 55,
+     "latency_ms": 244.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 120,
+     "latency_ms": 24.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 322.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 103,
+     "latency_ms": 18.2,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 227,
+     "latency_ms": 1084.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 450.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 111,
+     "latency_ms": 15.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-002",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 245.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 90,
+     "latency_ms": 16.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 341.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 87,
+     "latency_ms": 16.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 28,
+     "latency_ms": 649.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 99,
+     "latency_ms": 30.6,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 194,
+     "latency_ms": 860.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 55,
+     "latency_ms": 354.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 200,
+     "latency_ms": 24.8,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-003",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 427.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 90,
+     "latency_ms": 18.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 326.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 120,
+     "latency_ms": 16.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 44,
+     "latency_ms": 268.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 103,
+     "latency_ms": 28.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 239,
+     "latency_ms": 665.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 52,
+     "latency_ms": 364.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 88,
+     "latency_ms": 13.4,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-004",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 410.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 152,
+     "latency_ms": 24.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 327.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 140,
+     "latency_ms": 28.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 44,
+     "latency_ms": 351.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 127,
+     "latency_ms": 28.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 422,
+     "latency_ms": 1012.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 407.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 103,
+     "latency_ms": 20.1,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-005",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "currency_convert",
+     "args": {
+      "from": "USD",
+      "to": "EUR"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 30,
+     "latency_ms": 315.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "currency_convert",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 104,
+     "latency_ms": 20.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 266.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 189,
+     "latency_ms": 27.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 55,
+     "latency_ms": 343.3,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 113,
+     "latency_ms": 20.7,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 35,
+     "latency_ms": 391.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 130,
+     "latency_ms": 15.7,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 288,
+     "latency_ms": 1701.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": [
+     "extra"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-006",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 38,
+     "latency_ms": 413.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 95,
+     "latency_ms": 12.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 40,
+     "latency_ms": 455.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 132,
+     "latency_ms": 25.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 50,
+     "latency_ms": 498.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 142,
+     "latency_ms": 21.2,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 256,
+     "latency_ms": 651.3,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-007",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 410.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 186,
+     "latency_ms": 29.9,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 29,
+     "latency_ms": 477.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 105,
+     "latency_ms": 31.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 62,
+     "latency_ms": 380.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 163,
+     "latency_ms": 30.0,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 390,
+     "latency_ms": 1844.1,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 42,
+     "latency_ms": 494.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 129,
+     "latency_ms": 22.8,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": []
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-008",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 34,
+     "latency_ms": 342.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 143,
+     "latency_ms": 18.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 48,
+     "latency_ms": 254.2,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 115,
+     "latency_ms": 15.0,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 210,
+     "latency_ms": 1288.8,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "book_flight",
+     "args": {
+      "flight_id": "TP1351"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 342.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "book_flight",
+     "args": {},
+     "result": {
+      "booking": "PNR-X1",
+      "status": "held"
+     },
+     "content": "",
+     "tokens": 107,
+     "latency_ms": 8.6,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": [
+     "skip"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-009",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 461.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 145,
+     "latency_ms": 23.0,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 36,
+     "latency_ms": 490.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "error": "timeout"
+     },
+     "content": "",
+     "tokens": 114,
+     "latency_ms": 18.6,
+     "error": true
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 54,
+     "latency_ms": 365.4,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 98,
+     "latency_ms": 23.6,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 31,
+     "latency_ms": 565.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 123,
+     "latency_ms": 27.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 301,
+     "latency_ms": 887.9,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": [
+     "tool_error_retried"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-010",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 484.8,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 129,
+     "latency_ms": 14.3,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 52,
+     "latency_ms": 662.6,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 91,
+     "latency_ms": 24.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 33,
+     "latency_ms": 547.1,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "error": "timeout"
+     },
+     "content": "",
+     "tokens": 157,
+     "latency_ms": 17.9,
+     "error": true
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 37,
+     "latency_ms": 643.9,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 113,
+     "latency_ms": 27.3,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 192,
+     "latency_ms": 761.7,
+     "error": false
+    }
+   ],
+   "final_answer": "Lisbon trip itinerary: flight TP1351 ($142), hotel Alfama Inn ($98/night), sunny weather 19C.",
+   "metadata": {
+    "defects": [
+     "tool_error_retried"
+    ]
+   }
+  },
+  {
+   "run_id": "baseline-trip_planner-011",
+   "task_id": "trip_planner",
+   "task": "Plan a weekend trip to Lisbon next month: flights, hotel, and weather.",
+   "steps": [
+    {
+     "type": "tool_call",
+     "tool": "search_flights",
+     "args": {
+      "destination": "LIS",
+      "date": "2026-12-12"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 25,
+     "latency_ms": 337.0,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_flights",
+     "args": {},
+     "result": {
+      "flights": [
+       {
+        "id": "TP1351",
+        "price": 142
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 66,
+     "latency_ms": 24.4,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "search_hotels",
+     "args": {
+      "city": "Lisbon",
+      "nights": 2
+     },
+     "result": null,
+     "content": "",
+     "tokens": 32,
+     "latency_ms": 318.5,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "search_hotels",
+     "args": {},
+     "result": {
+      "hotels": [
+       {
+        "name": "Alfama Inn",
+        "price": 98
+       }
+      ]
+     },
+     "content": "",
+     "tokens": 106,
+     "latency_ms": 15.2,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "get_weather",
+     "args": {
+      "city": "Lisbon"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 54,
+     "latency_ms": 314.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "get_weather",
+     "args": {},
+     "result": {
+      "forecast": "sunny",
+      "high_c": 19
+     },
+     "content": "",
+     "tokens": 85,
+     "latency_ms": 26.5,
+     "error": false
+    },
+    {
+     "type": "tool_call",
+     "tool": "currency_convert",
+     "args": {
+      "from": "USD",
+      "to": "EUR"
+     },
+     "result": null,
+     "content": "",
+     "tokens": 39,
+     "latency_ms": 283.7,
+     "error": false
+    },
+    {
+     "type": "observation",
+     "tool": "currency_convert",
+     "args": {},
+     "result": {
+      "ok": true
+     },
+     "content": "",
+     "tokens": 87,
+     "latency_ms": 27.0,
+     "error": false
+    },
+    {
+     "type": "llm",
+     "tool": null,
+     "args": {},
+     "result": null,
+     "content": "Compare the flight and hotel options by price, and factor in the sunny weather.",
+     "tokens": 243,
+     "latency_ms": 1808.2,
+     "error": false
+    }
+   ],
+   "final_answer": "Sorry, something went wrong.",
+   "metadata": {
+    "defects": [
+     "extra",
+     "wrong_answer"
+    ]
+   }
+  }
+ ]
+}

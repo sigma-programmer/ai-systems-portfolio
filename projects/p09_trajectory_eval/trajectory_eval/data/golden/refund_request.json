@@ -1,0 +1,174 @@
+{
+ "task_id": "refund_request",
+ "description": "Customer asks for a refund on a damaged order.",
+ "nodes": [
+  {
+   "id": "lookup_customer",
+   "step_type": "tool_call",
+   "tool": "lookup_customer",
+   "args": [
+    {
+     "key": "email",
+     "kind": "regex",
+     "pattern": "[\\w.+-]+@[\\w-]+\\.[a-z]{2,}",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "get_order",
+   "step_type": "tool_call",
+   "tool": "get_order",
+   "args": [
+    {
+     "key": "order_id",
+     "kind": "regex",
+     "pattern": "ORD-\\d{5}",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "check_policy",
+   "step_type": "tool_call",
+   "tool": "check_refund_policy",
+   "args": [
+    {
+     "key": "order_id",
+     "kind": "regex",
+     "pattern": "ORD-\\d{5}",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "issue_refund",
+   "step_type": "tool_call",
+   "tool": "issue_refund",
+   "args": [
+    {
+     "key": "order_id",
+     "kind": "regex",
+     "pattern": "ORD-\\d{5}",
+     "threshold": 0.35,
+     "required": true
+    },
+    {
+     "key": "amount",
+     "kind": "schema",
+     "schema": {
+      "type": "number",
+      "minimum": 0.01,
+      "maximum": 500
+     },
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "send_confirmation",
+   "step_type": "tool_call",
+   "tool": "send_email",
+   "args": [
+    {
+     "key": "to",
+     "kind": "regex",
+     "pattern": "[\\w.+-]+@[\\w-]+\\.[a-z]{2,}",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": true,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "no_delete",
+   "step_type": "tool_call",
+   "tool": "delete_account",
+   "args": [],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": true,
+   "max_repeats": 1,
+   "description": "Never delete the customer's account."
+  },
+  {
+   "id": "no_big_refund",
+   "step_type": "tool_call",
+   "tool": "issue_refund",
+   "args": [
+    {
+     "key": "amount",
+     "kind": "schema",
+     "schema": {
+      "type": "number",
+      "minimum": 500.01
+     },
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": true,
+   "max_repeats": 1,
+   "description": "Refunds above $500 need a human."
+  }
+ ],
+ "edges": [
+  [
+   "lookup_customer",
+   "get_order"
+  ],
+  [
+   "get_order",
+   "check_policy"
+  ],
+  [
+   "check_policy",
+   "issue_refund"
+  ],
+  [
+   "issue_refund",
+   "send_confirmation"
+  ]
+ ],
+ "answer": {
+  "key": "answer",
+  "kind": "regex",
+  "pattern": "(?is).*refund(ed)? of \\$\\d+(\\.\\d\\d)?.*",
+  "threshold": 0.35,
+  "required": true
+ },
+ "max_steps": 20,
+ "graded_step_types": [
+  "tool_call"
+ ]
+}

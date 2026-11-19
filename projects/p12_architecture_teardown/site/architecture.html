@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Architecture</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="architecture">Architecture</h1>
+<h2 id="platform-topology">Platform topology</h2>
+<p>How the eleven subsystems compose into one production agent platform.</p>
+<pre class="mermaid">flowchart TB
+    subgraph Edge[&quot;Edge&quot;]
+        client([&quot;Client / Agent&quot;])
+        gateway[&quot;Semantic Gateway (p11)&quot;]
+        proxy[&quot;Security Proxy (p10)&quot;]
+    end
+    subgraph Orchestration[&quot;Orchestration&quot;]
+        supervisor[&quot;Swarm Supervisor (p08)&quot;]
+        durable[&quot;Durable State Machine (p05)&quot;]
+    end
+    subgraph Context[&quot;Context&quot;]
+        assembler[&quot;Context Assembler (p01)&quot;]
+        memory[(&quot;3-Tier Memory (p07)&quot;)]
+    end
+    subgraph Knowledge[&quot;Knowledge&quot;]
+        agentic[&quot;Agentic RAG (p04)&quot;]
+        hybrid[&quot;Hybrid Retrieval (p02)&quot;]
+        graph[(&quot;GraphRAG (p03)&quot;)]
+    end
+    subgraph Tools[&quot;Tools&quot;]
+        mcp[&quot;MCP Tool Server (p06)&quot;]
+    end
+    subgraph Inference[&quot;Inference&quot;]
+        llm([&quot;Claude models&quot;])
+    end
+    subgraph Quality[&quot;Quality&quot;]
+        evalgate[&quot;Trajectory CI Gate (p09)&quot;]
+    end
+    client --&gt;|&quot;request&quot;| proxy
+    gateway --&gt;|&quot;routed call&quot;| llm
+    proxy --&gt;|&quot;sanitized msg&quot;| supervisor
+    supervisor --&gt;|&quot;checkpointed steps&quot;| durable
+    durable --&gt;|&quot;step context&quot;| assembler
+    durable --&gt;|&quot;tools/call&quot;| mcp
+    durable --&gt;|&quot;trajectory&quot;| evalgate
+    assembler --&gt;|&quot;recall&quot;| memory
+    assembler --&gt;|&quot;evidence&quot;| agentic
+    assembler --&gt;|&quot;prompt&quot;| gateway
+    agentic --&gt;|&quot;retrieve&quot;| hybrid
+    agentic --&gt;|&quot;multi-hop&quot;| graph</pre>
+<h2 id="swarm-topology-p08">Swarm topology (p08)</h2>
+<p>Typed edges: every handoff is a Pydantic model validated at the boundary; the topology itself is type-checked when the graph is built.</p>
+<pre class="mermaid">flowchart LR
+    sup[&quot;Supervisor&quot;]
+    subgraph Swarm[&quot;Swarm&quot;]
+        res[&quot;Researcher&quot;]
+        cod[&quot;Coder&quot;]
+        rv1[&quot;Reviewer A&quot;]
+        rv2[&quot;Reviewer B&quot;]
+        rv3[&quot;Reviewer C&quot;]
+        vote[&quot;Consensus vote&quot;]
+    end
+    sup --&gt;|&quot;TaskSpec&quot;| res
+    res --&gt;|&quot;ResearchFindings&quot;| cod
+    cod --&gt;|&quot;CodeArtifact&quot;| rv1
+    cod --&gt;|&quot;CodeArtifact&quot;| rv2
+    cod --&gt;|&quot;CodeArtifact&quot;| rv3
+    rv1 --&gt;|&quot;ReviewVerdict&quot;| vote
+    rv2 --&gt;|&quot;ReviewVerdict&quot;| vote
+    rv3 --&gt;|&quot;ReviewVerdict&quot;| vote
+    vote --&gt;|&quot;accept / revise&quot;| sup</pre></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p06 · Raw MCP Tool Server</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="p06-raw-mcp-tool-server">p06 · Raw MCP Tool Server</h1>
+<blockquote>You understand tooling at the protocol level.</blockquote>
+<h2 id="the-problem">The problem</h2>
+<p>SDKs make MCP feel like magic, and magic hides the details that page you at 3 a.m. For example: whether a bad argument is a JSON-RPC protocol error or a tool error the model can recover from, how capabilities are negotiated, who is allowed to see which tool, and what stops <code>../../etc/passwd</code>.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart LR
+    C[&quot;MCP client&quot;] --&gt;|&quot;stdio NDJSON / HTTP POST&quot;| T[&quot;transport&quot;]
+    T --&gt; J[&quot;JSON-RPC 2.0 core: batches, notifications, error codes&quot;]
+    J --&gt; A[&quot;auth: token to scopes, rate limit&quot;]
+    A --&gt; L[&quot;lifecycle: initialize, initialized, ping&quot;]
+    A --&gt; TL[&quot;tools/list (scope-filtered, cursor paging)&quot;]
+    A --&gt; TC[&quot;tools/call&quot;]
+    TC --&gt; V[&quot;Pydantic v2 validation (extra=forbid)&quot;]
+    V --&gt; SB[&quot;sandbox: fs jail / python subprocess with rlimits&quot;]
+    SB --&gt; R[&quot;content blocks + structuredContent / isError&quot;]</pre>
+<p>No MCP SDK is used: framing, dispatch, schema generation and the lifecycle are all implemented directly. Tool input schemas are generated from Pydantic models, so the schema the model sees cannot drift from the code that validates it.</p>
+<h2 id="the-error-boundary-decision">The error-boundary decision</h2>
+<ul><li><strong>Malformed request or invalid params</strong> → JSON-RPC error (<code>-32600</code> / <code>-32602</code>). The <em>client</em> is broken.</li><li><strong>Valid call that fails inside the tool</strong> → a normal result with <code>isError: true</code>. The <em>model</em> can read the message and try again.</li></ul>
+<p>Getting this split wrong is the most common MCP server bug. The benchmark's 54-case fuzz set checks it, and the server answers all 54 correctly.</p>
+<h2 id="results">Results</h2>
+<div class="table-wrap"><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td><code>tools/call</code> in-process</td><td>~79k req/s</td></tr><tr><td><code>tools/call</code> over stdio, sequential</td><td>~35k req/s</td></tr><tr><td><code>tools/call</code> over stdio, pipelined</td><td>~67k req/s</td></tr><tr><td>Malformed-request fuzz cases handled correctly</td><td>54 / 54</td></tr><tr><td>Sandbox escape attempts blocked</td><td><strong>29 / 29</strong> (10 filesystem, 19 python-exec)</td></tr></tbody></table></div>
+<p>Escape attempts include path traversal, symlinks pointing outside the jail, absolute paths, reading environment variables, network access, fork bombs, memory bombs, infinite loops and oversized output.</p>
+<h2 id="tradeoffs">Tradeoffs</h2>
+<ul><li>The python-exec sandbox uses process isolation plus <code>setrlimit</code>, an empty environment and a temp working directory. That is fine for defense in depth, but it is <strong>not</strong> a security boundary against a determined attacker. Production would add a container or gVisor/Firecracker. The tool interface stays the same.</li><li>We own spec conformance: a protocol revision means code changes here, whereas an SDK user would just bump a version.</li></ul>
+<p>See ADR-0007.</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>

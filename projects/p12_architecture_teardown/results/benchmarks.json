@@ -1,0 +1,1448 @@
+{
+  "generated_at": "2026-11-19T05:39:12Z",
+  "environment": {
+    "python": "3.14.7",
+    "platform": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "offline": true,
+    "pythonhashseed": "0"
+  },
+  "repeats": 2,
+  "results": [
+    {
+      "project": "p01",
+      "title": "Context Assembler Engine",
+      "ok": true,
+      "wall_s": 13.95,
+      "fingerprint": "712e75a45eb3ca29",
+      "metrics": {
+        "overflow_property": {
+          "cases": 250,
+          "overflows": 0,
+          "overflow_errors_raised": 0,
+          "repair_rounds": 0,
+          "constrained_cases": 176,
+          "utilization_when_constrained_mean": 0.7798,
+          "utilization_when_constrained_median": 0.9679
+        },
+        "retention_vs_naive": {
+          "cases": 30,
+          "window": 4096,
+          "reserve_output": 1024,
+          "mean_full_context_tokens": 13976.8,
+          "mean_sent_tokens": 3007.1,
+          "retention_rates": {
+            "assembler": {
+              "needle_doc": 1.0,
+              "buried_fact": 1.0,
+              "query": 1.0,
+              "system_prompt": 1.0,
+              "all_four": 1.0
+            },
+            "assembler_drop_oldest_history": {
+              "needle_doc": 1.0,
+              "buried_fact": 0.0,
+              "query": 1.0,
+              "system_prompt": 1.0,
+              "all_four": 0.0
+            },
+            "naive_keep_head": {
+              "needle_doc": 0.0,
+              "buried_fact": 1.0,
+              "query": 0.0,
+              "system_prompt": 1.0,
+              "all_four": 0.0
+            },
+            "naive_keep_tail": {
+              "needle_doc": 0.267,
+              "buried_fact": 0.0,
+              "query": 1.0,
+              "system_prompt": 0.0,
+              "all_four": 0.0
+            }
+          }
+        },
+        "latency": {
+          "window_8192": {
+            "p50_ms": 45.3,
+            "p95_ms": 46.35,
+            "payload_tokens": 5992,
+            "utilization": 0.9753
+          },
+          "window_32768": {
+            "p50_ms": 10.8,
+            "p95_ms": 11.04,
+            "payload_tokens": 19870,
+            "utilization": 0.6468
+          },
+          "window_200000": {
+            "p50_ms": 7.48,
+            "p95_ms": 17.94,
+            "payload_tokens": 19870,
+            "utilization": 0.1004
+          },
+          "input_demand_tokens": 59144
+        },
+        "cost": {
+          "input_price_usd_per_mtok": 4.0,
+          "full_context_usd_per_1k_requests": 55.907,
+          "assembled_usd_per_1k_requests": 12.028,
+          "token_reduction": 0.7849
+        },
+        "total_runtime_s": 13.54
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p02",
+      "title": "Hybrid Reranking Retrieval Stack",
+      "ok": true,
+      "wall_s": 3.27,
+      "fingerprint": "3a5f9243e8a5d443",
+      "metrics": {
+        "corpus": {
+          "n_docs": 240,
+          "n_queries": 240,
+          "n_train": 120,
+          "n_test": 120,
+          "vocabulary": 488,
+          "index_build_ms": 170.3
+        },
+        "reranker": {
+          "train_ms": 105.6,
+          "newton_iterations": 9,
+          "standardized_weights": {
+            "bm25_log": -0.1831,
+            "bm25_rel": 3.6555,
+            "dense_cos": 0.8109,
+            "dense_rel": 2.9162,
+            "term_coverage": -7.0437,
+            "idf_coverage": 4.3576,
+            "bigram_match": 1.408,
+            "proximity": -0.0859,
+            "fuzzy_coverage": -0.1163,
+            "title_coverage": -6.5229,
+            "title_fuzzy": 6.0317
+          }
+        },
+        "sweep": [
+          {
+            "config": "sparse/c10",
+            "recall@1": 0.5333,
+            "recall@10": 0.7667,
+            "mrr": 0.589,
+            "ndcg@10": 0.6988,
+            "latency_ms_p50": 0.0154,
+            "latency_ms_p95": 0.0213,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.3179,
+              "paraphrase": 0.0381
+            }
+          },
+          {
+            "config": "dense/flat/c10",
+            "recall@1": 0.5667,
+            "recall@10": 0.7,
+            "mrr": 0.6035,
+            "ndcg@10": 0.3987,
+            "latency_ms_p50": 0.0771,
+            "latency_ms_p95": 0.1238,
+            "mrr_by_type": {
+              "keyword": 0.16,
+              "lexical": 1.0,
+              "mixed": 0.9833,
+              "paraphrase": 0.2706
+            }
+          },
+          {
+            "config": "dense/ivf@1/c10",
+            "recall@1": 0.55,
+            "recall@10": 0.625,
+            "mrr": 0.5737,
+            "ndcg@10": 0.3214,
+            "latency_ms_p50": 0.0204,
+            "latency_ms_p95": 0.0253,
+            "mrr_by_type": {
+              "keyword": 0.1833,
+              "lexical": 0.9333,
+              "mixed": 0.9333,
+              "paraphrase": 0.245
+            }
+          },
+          {
+            "config": "dense/ivf@4/c10",
+            "recall@1": 0.575,
+            "recall@10": 0.6917,
+            "mrr": 0.6068,
+            "ndcg@10": 0.354,
+            "latency_ms_p50": 0.0263,
+            "latency_ms_p95": 0.0304,
+            "mrr_by_type": {
+              "keyword": 0.1567,
+              "lexical": 1.0,
+              "mixed": 1.0,
+              "paraphrase": 0.2706
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c10",
+            "recall@1": 0.5,
+            "recall@10": 0.8833,
+            "mrr": 0.6449,
+            "ndcg@10": 0.6251,
+            "latency_ms_p50": 0.0453,
+            "latency_ms_p95": 0.0557,
+            "mrr_by_type": {
+              "keyword": 0.65,
+              "lexical": 1.0,
+              "mixed": 0.6639,
+              "paraphrase": 0.2656
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.5/c10",
+            "recall@1": 0.6083,
+            "recall@10": 0.8833,
+            "mrr": 0.7154,
+            "ndcg@10": 0.702,
+            "latency_ms_p50": 0.0485,
+            "latency_ms_p95": 0.0578,
+            "mrr_by_type": {
+              "keyword": 0.6667,
+              "lexical": 1.0,
+              "mixed": 0.9333,
+              "paraphrase": 0.2615
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c50",
+            "recall@1": 0.5333,
+            "recall@10": 0.8167,
+            "mrr": 0.6376,
+            "ndcg@10": 0.5743,
+            "latency_ms_p50": 0.0862,
+            "latency_ms_p95": 0.126,
+            "mrr_by_type": {
+              "keyword": 0.6242,
+              "lexical": 1.0,
+              "mixed": 0.6639,
+              "paraphrase": 0.2623
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50",
+            "recall@1": 0.625,
+            "recall@10": 0.8917,
+            "mrr": 0.7249,
+            "ndcg@10": 0.6739,
+            "latency_ms_p50": 0.0987,
+            "latency_ms_p95": 0.1472,
+            "mrr_by_type": {
+              "keyword": 0.7278,
+              "lexical": 1.0,
+              "mixed": 0.9,
+              "paraphrase": 0.2718
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.7/c50",
+            "recall@1": 0.575,
+            "recall@10": 0.7583,
+            "mrr": 0.6246,
+            "ndcg@10": 0.5123,
+            "latency_ms_p50": 0.121,
+            "latency_ms_p95": 0.5184,
+            "mrr_by_type": {
+              "keyword": 0.2748,
+              "lexical": 1.0,
+              "mixed": 0.95,
+              "paraphrase": 0.2734
+            }
+          },
+          {
+            "config": "hybrid/ivf@2/rrf/c50",
+            "recall@1": 0.6167,
+            "recall@10": 0.8167,
+            "mrr": 0.6952,
+            "ndcg@10": 0.5194,
+            "latency_ms_p50": 0.1675,
+            "latency_ms_p95": 0.621,
+            "mrr_by_type": {
+              "keyword": 0.5567,
+              "lexical": 1.0,
+              "mixed": 0.95,
+              "paraphrase": 0.2742
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c50/rr10",
+            "recall@1": 0.7667,
+            "recall@10": 0.8167,
+            "mrr": 0.7903,
+            "ndcg@10": 0.6487,
+            "latency_ms_p50": 0.3662,
+            "latency_ms_p95": 1.373,
+            "mrr_by_type": {
+              "keyword": 0.7667,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.4833
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c50/rr20",
+            "recall@1": 0.8083,
+            "recall@10": 0.8583,
+            "mrr": 0.8319,
+            "ndcg@10": 0.6989,
+            "latency_ms_p50": 0.7384,
+            "latency_ms_p95": 1.5453,
+            "mrr_by_type": {
+              "keyword": 0.7667,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.65
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c50/rr40",
+            "recall@1": 0.925,
+            "recall@10": 0.9917,
+            "mrr": 0.9519,
+            "ndcg@10": 0.8039,
+            "latency_ms_p50": 1.1626,
+            "latency_ms_p95": 7.1329,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.8964
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr10",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8597,
+            "ndcg@10": 0.7482,
+            "latency_ms_p50": 0.3822,
+            "latency_ms_p95": 1.8844,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.5278
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr20",
+            "recall@1": 0.8667,
+            "recall@10": 0.925,
+            "mrr": 0.8919,
+            "ndcg@10": 0.7563,
+            "latency_ms_p50": 0.4847,
+            "latency_ms_p95": 1.005,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.6567
+            }
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr40",
+            "recall@1": 0.925,
+            "recall@10": 0.9917,
+            "mrr": 0.9521,
+            "ndcg@10": 0.8031,
+            "latency_ms_p50": 0.808,
+            "latency_ms_p95": 2.3861,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.8972
+            }
+          },
+          {
+            "config": "hybrid/flat/rrf/c10/rr20",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8586,
+            "ndcg@10": 0.7478,
+            "latency_ms_p50": 0.2927,
+            "latency_ms_p95": 0.5287,
+            "mrr_by_type": {
+              "keyword": 1.0,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.5233
+            }
+          },
+          {
+            "config": "hybrid/ivf@2/rrf/c50/rr40",
+            "recall@1": 0.9167,
+            "recall@10": 0.9833,
+            "mrr": 0.9437,
+            "ndcg@10": 0.7926,
+            "latency_ms_p50": 0.6293,
+            "latency_ms_p95": 0.9461,
+            "mrr_by_type": {
+              "keyword": 0.9667,
+              "lexical": 1.0,
+              "mixed": 0.9111,
+              "paraphrase": 0.8972
+            }
+          }
+        ],
+        "pareto_frontier_ndcg": [
+          {
+            "config": "sparse/c10",
+            "recall@1": 0.5333,
+            "recall@10": 0.7667,
+            "mrr": 0.589,
+            "ndcg@10": 0.6988,
+            "latency_ms_p50": 0.0154,
+            "latency_ms_p95": 0.0213
+          },
+          {
+            "config": "hybrid/flat/w0.5/c10",
+            "recall@1": 0.6083,
+            "recall@10": 0.8833,
+            "mrr": 0.7154,
+            "ndcg@10": 0.702,
+            "latency_ms_p50": 0.0485,
+            "latency_ms_p95": 0.0578
+          },
+          {
+            "config": "hybrid/flat/rrf/c10/rr20",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8586,
+            "ndcg@10": 0.7478,
+            "latency_ms_p50": 0.2927,
+            "latency_ms_p95": 0.5287
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr10",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8597,
+            "ndcg@10": 0.7482,
+            "latency_ms_p50": 0.3822,
+            "latency_ms_p95": 1.8844
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr20",
+            "recall@1": 0.8667,
+            "recall@10": 0.925,
+            "mrr": 0.8919,
+            "ndcg@10": 0.7563,
+            "latency_ms_p50": 0.4847,
+            "latency_ms_p95": 1.005
+          },
+          {
+            "config": "hybrid/ivf@2/rrf/c50/rr40",
+            "recall@1": 0.9167,
+            "recall@10": 0.9833,
+            "mrr": 0.9437,
+            "ndcg@10": 0.7926,
+            "latency_ms_p50": 0.6293,
+            "latency_ms_p95": 0.9461
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr40",
+            "recall@1": 0.925,
+            "recall@10": 0.9917,
+            "mrr": 0.9521,
+            "ndcg@10": 0.8031,
+            "latency_ms_p50": 0.808,
+            "latency_ms_p95": 2.3861
+          },
+          {
+            "config": "hybrid/flat/rrf/c50/rr40",
+            "recall@1": 0.925,
+            "recall@10": 0.9917,
+            "mrr": 0.9519,
+            "ndcg@10": 0.8039,
+            "latency_ms_p50": 1.1626,
+            "latency_ms_p95": 7.1329
+          }
+        ],
+        "pareto_frontier_mrr": [
+          {
+            "config": "sparse/c10",
+            "recall@1": 0.5333,
+            "recall@10": 0.7667,
+            "mrr": 0.589,
+            "ndcg@10": 0.6988,
+            "latency_ms_p50": 0.0154,
+            "latency_ms_p95": 0.0213
+          },
+          {
+            "config": "dense/ivf@4/c10",
+            "recall@1": 0.575,
+            "recall@10": 0.6917,
+            "mrr": 0.6068,
+            "ndcg@10": 0.354,
+            "latency_ms_p50": 0.0263,
+            "latency_ms_p95": 0.0304
+          },
+          {
+            "config": "hybrid/flat/rrf/c10",
+            "recall@1": 0.5,
+            "recall@10": 0.8833,
+            "mrr": 0.6449,
+            "ndcg@10": 0.6251,
+            "latency_ms_p50": 0.0453,
+            "latency_ms_p95": 0.0557
+          },
+          {
+            "config": "hybrid/flat/w0.5/c10",
+            "recall@1": 0.6083,
+            "recall@10": 0.8833,
+            "mrr": 0.7154,
+            "ndcg@10": 0.702,
+            "latency_ms_p50": 0.0485,
+            "latency_ms_p95": 0.0578
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50",
+            "recall@1": 0.625,
+            "recall@10": 0.8917,
+            "mrr": 0.7249,
+            "ndcg@10": 0.6739,
+            "latency_ms_p50": 0.0987,
+            "latency_ms_p95": 0.1472
+          },
+          {
+            "config": "hybrid/flat/rrf/c10/rr20",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8586,
+            "ndcg@10": 0.7478,
+            "latency_ms_p50": 0.2927,
+            "latency_ms_p95": 0.5287
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr10",
+            "recall@1": 0.8333,
+            "recall@10": 0.8917,
+            "mrr": 0.8597,
+            "ndcg@10": 0.7482,
+            "latency_ms_p50": 0.3822,
+            "latency_ms_p95": 1.8844
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr20",
+            "recall@1": 0.8667,
+            "recall@10": 0.925,
+            "mrr": 0.8919,
+            "ndcg@10": 0.7563,
+            "latency_ms_p50": 0.4847,
+            "latency_ms_p95": 1.005
+          },
+          {
+            "config": "hybrid/ivf@2/rrf/c50/rr40",
+            "recall@1": 0.9167,
+            "recall@10": 0.9833,
+            "mrr": 0.9437,
+            "ndcg@10": 0.7926,
+            "latency_ms_p50": 0.6293,
+            "latency_ms_p95": 0.9461
+          },
+          {
+            "config": "hybrid/flat/w0.5/c50/rr40",
+            "recall@1": 0.925,
+            "recall@10": 0.9917,
+            "mrr": 0.9521,
+            "ndcg@10": 0.8031,
+            "latency_ms_p50": 0.808,
+            "latency_ms_p95": 2.3861
+          }
+        ],
+        "best_by_mrr": {
+          "config": "hybrid/flat/w0.5/c50/rr40",
+          "recall@1": 0.925,
+          "recall@10": 0.9917,
+          "mrr": 0.9521,
+          "ndcg@10": 0.8031,
+          "latency_ms_p50": 0.808,
+          "latency_ms_p95": 2.3861
+        },
+        "filtering": {
+          "config": "hybrid/flat/w0.5/c50",
+          "mrr_unfiltered": 0.7249,
+          "mrr_domain_filtered": 0.8424,
+          "latency_ms_p50_unfiltered": 0.1085,
+          "latency_ms_p50_filtered": 0.0811,
+          "filter_violations": 0
+        },
+        "ivf_scaling": {
+          "n_vectors": 50000,
+          "dim": 128,
+          "n_lists": 128,
+          "build_ms": 1237.8,
+          "sweep": [
+            {
+              "nprobe": "exact",
+              "recall@10": 1.0,
+              "latency_ms": 0.9613,
+              "scanned_frac": 1.0
+            },
+            {
+              "nprobe": 1,
+              "recall@10": 0.9365,
+              "latency_ms": 0.0568,
+              "scanned_frac": 0.0086
+            },
+            {
+              "nprobe": 2,
+              "recall@10": 0.949,
+              "latency_ms": 0.0605,
+              "scanned_frac": 0.0166
+            },
+            {
+              "nprobe": 4,
+              "recall@10": 0.9605,
+              "latency_ms": 0.0725,
+              "scanned_frac": 0.0325
+            },
+            {
+              "nprobe": 8,
+              "recall@10": 0.9705,
+              "latency_ms": 0.0986,
+              "scanned_frac": 0.0639
+            },
+            {
+              "nprobe": 16,
+              "recall@10": 0.9815,
+              "latency_ms": 0.1814,
+              "scanned_frac": 0.1261
+            },
+            {
+              "nprobe": 32,
+              "recall@10": 0.9885,
+              "latency_ms": 0.3524,
+              "scanned_frac": 0.2514
+            }
+          ]
+        },
+        "llm_rerank_prompt_tokens_depth20_mean": 1971.9,
+        "total_runtime_s": 3.03
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p03",
+      "title": "GraphRAG Knowledge Pipeline",
+      "ok": true,
+      "wall_s": 0.38,
+      "fingerprint": "369bfac2b4a67fde",
+      "metrics": {
+        "corpus": {
+          "documents": 26,
+          "chunks": 26,
+          "chunk_tokens": 1411,
+          "questions": 26,
+          "multihop_questions": 22
+        },
+        "graph": {
+          "nodes": 38,
+          "edges": 80,
+          "typed_edges": 54,
+          "cooccurrence_edges": 26,
+          "node_types": {
+            "LOCATION": 6,
+            "ORG": 12,
+            "PERSON": 17,
+            "PRODUCT": 3
+          },
+          "chunks": 26,
+          "communities_per_level": {
+            "0": 10,
+            "1": 7
+          },
+          "rejected_relations": 0
+        },
+        "index_latency_ms": 12.255,
+        "index_stage_ms": {
+          "chunk_extract": 5.17,
+          "resolve": 3.75,
+          "graph": 0.58,
+          "communities": 2.62
+        },
+        "extraction_vs_gold": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "typed_triples": 54,
+          "gold_triples": 54
+        },
+        "systems": {
+          "vector_rag_top3": {
+            "p50_latency_ms": 0.253,
+            "mean_context_tokens": 176.0,
+            "support_doc_recall": 0.5769,
+            "accuracy_overall": 0.2692,
+            "accuracy_multihop": 0.1364,
+            "accuracy_by_hops": {
+              "1": 1.0,
+              "2": 0.125,
+              "3": 0.1667
+            }
+          },
+          "vector_rag_top5": {
+            "p50_latency_ms": 0.357,
+            "mean_context_tokens": 288.5,
+            "support_doc_recall": 0.6923,
+            "accuracy_overall": 0.2692,
+            "accuracy_multihop": 0.1364,
+            "accuracy_by_hops": {
+              "1": 1.0,
+              "2": 0.125,
+              "3": 0.1667
+            }
+          },
+          "graphrag_local": {
+            "p50_latency_ms": 0.046,
+            "mean_context_tokens": 127.7,
+            "support_doc_recall": 1.0,
+            "mean_path_length": 2.077,
+            "accuracy_overall": 1.0,
+            "accuracy_multihop": 1.0,
+            "accuracy_by_hops": {
+              "1": 1.0,
+              "2": 1.0,
+              "3": 1.0
+            }
+          }
+        },
+        "global_search": {
+          "questions": 3,
+          "p50_latency_ms": 10.218,
+          "mean_points": 2.67,
+          "level0_communities": 10,
+          "level0_summary_tokens": 1224
+        },
+        "llm_mode_estimate": {
+          "extraction_input_tokens": 7391,
+          "extraction_output_tokens": 2116,
+          "index_cost_usd": 0.0899,
+          "global_query_map_calls": 10
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p04",
+      "title": "Self-Correcting Agentic RAG",
+      "ok": true,
+      "wall_s": 0.25,
+      "fingerprint": "304a34b5767d67cb",
+      "metrics": {
+        "n_questions": {
+          "answerable": 24,
+          "unanswerable": 12,
+          "adversarial": 12,
+          "adversarial_runs": 60
+        },
+        "answer_accuracy": 1.0,
+        "multi_part_accuracy": 1.0,
+        "abstention_precision": 1.0,
+        "abstention_recall": 1.0,
+        "citation_precision": 1.0,
+        "false_flag_rate_clean_claims": 0.0,
+        "confidence_brier": 0.0011,
+        "hallucination_catch_rate": 1.0,
+        "injected_claims": 140,
+        "catch_rate_by_mutation": {
+          "entity_swap": 1.0,
+          "fabricated": 1.0,
+          "miscite": 1.0,
+          "negation_flip": 1.0,
+          "number_swap": 1.0,
+          "unit_swap": 1.0
+        },
+        "hallucinations_leaked_to_final_answer": 0,
+        "adversarial_accuracy_after_repair": 0.9833,
+        "adversarial_abstentions": 0,
+        "paraphrased_true_claims": 19,
+        "paraphrase_false_flag_rate": 0.1579,
+        "paraphrase_run_accuracy_after_repair": 1.0,
+        "avg_retrieval_steps": 1.667,
+        "rewrites_issued": 24,
+        "latency_ms": {
+          "mean": 0.626,
+          "p50": 0.569,
+          "p95": 0.928,
+          "adversarial_mean": 1.055
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p05",
+      "title": "Durable Agent State Machine",
+      "ok": true,
+      "wall_s": 1.93,
+      "fingerprint": "78a6b02a4d2ed6e6",
+      "metrics": {
+        "chaos": {
+          "workflows": 200,
+          "steps_per_workflow": 3,
+          "completion_rate": 1.0,
+          "dead_lettered": 0,
+          "crashes_injected": 112,
+          "transient_failures_injected": 122,
+          "interrupted_attempts_recovered": 90,
+          "side_effects_expected": 600,
+          "side_effects_applied": 600,
+          "duplicate_side_effects": 0,
+          "effect_reinvocations_deduped_by_key": 24,
+          "mean_retries_per_workflow": 0.61,
+          "recovery_ms_mean": 1.793,
+          "recovery_ms_p95": 3.159,
+          "checkpoint_txn_ms_mean": 0.1626,
+          "chaos_wall_s": 0.764
+        },
+        "checkpoint": {
+          "steps_measured": 500,
+          "memory_ms_per_step": 0.0817,
+          "file_sync_normal_ms_per_step": 0.1957,
+          "file_sync_full_ms_per_step": 0.2729,
+          "checkpoint_overhead_ms_per_step_full": 0.1912,
+          "checkpoint_overhead_ms_per_step_normal": 0.114
+        },
+        "process_kills": {
+          "kills": 3,
+          "completed_after_resume": 3,
+          "side_effects_applied": 9,
+          "duplicate_side_effects": 0,
+          "resume_process_ms_mean": 110.6
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p06",
+      "title": "Raw MCP Tool Server",
+      "ok": true,
+      "wall_s": 5.26,
+      "fingerprint": "70b0ddcc96ddf1a8",
+      "metrics": {
+        "inproc_tools_call_rps": 70885,
+        "stdio_tools_call_rps_sequential": 28278,
+        "stdio_tools_call_rps_pipelined": 63847,
+        "inproc_calls": 5000,
+        "stdio_calls": 1000,
+        "fuzz_cases": 54,
+        "fuzz_correct": 54,
+        "fuzz_accuracy": 1.0,
+        "fuzz_failures": [],
+        "sandbox_escape_attempts": 29,
+        "sandbox_escapes_blocked": 29,
+        "sandbox_fs_blocked": "10/10",
+        "sandbox_python_blocked": "19/19",
+        "sandbox_not_blocked": []
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p07",
+      "title": "3-Tier Memory System",
+      "ok": true,
+      "wall_s": 0.19,
+      "fingerprint": "688bbc0b8962c74d",
+      "metrics": {
+        "sessions": 4,
+        "turns": 38,
+        "probes": 12,
+        "memory_system": {
+          "precision@1": 0.8333,
+          "precision@3": 0.3889,
+          "recall@3": 1.0,
+          "mrr@5": 0.9028,
+          "stale_outranks_current": "0/2"
+        },
+        "baseline_flat_vector_store": {
+          "precision@1": 0.4167,
+          "precision@3": 0.2778,
+          "recall@3": 0.75,
+          "mrr@5": 0.5903,
+          "stale_outranks_current": "2/2"
+        },
+        "top1_tier_distribution": {
+          "semantic": 12
+        },
+        "compression_ratio_episodic": 0.3668,
+        "episodes": 2,
+        "facts_active": 11,
+        "facts_superseded": 0,
+        "profile_location": "Lisbon",
+        "profile_employer": "Helix Robotics",
+        "eviction_counts": {
+          "working_evictions_to_episodic": 18,
+          "working_expired_ttl": 0,
+          "episodes_expired_ttl": 3,
+          "superseded_facts_purged": 2,
+          "query_time_eviction": {
+            "working_expired": 0,
+            "episodes_expired": 3,
+            "facts_purged": 2
+          }
+        },
+        "fact_actions": {
+          "inserted": 12,
+          "superseded": 1,
+          "retracted": 1
+        },
+        "raw_user_words": 204,
+        "latency_ms": {
+          "observe_mean": 0.685,
+          "observe_p95": 1.09,
+          "recall_mean": 0.201,
+          "recall_max": 1.173
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p08",
+      "title": "Typed Multi-Agent Swarm",
+      "ok": true,
+      "wall_s": 8.17,
+      "fingerprint": "e52d97a03a4e301f",
+      "metrics": {
+        "n_tasks": 15,
+        "modes": {
+          "single_agent": {
+            "success_rate": 0.0,
+            "approved_rate": 0.0,
+            "false_approvals": 0,
+            "avg_revisions": 0.0,
+            "avg_tokens": 329.5,
+            "avg_steps": 1.0,
+            "escalations": 0,
+            "verdict_accuracy": null,
+            "decisions": 0,
+            "wall_s": 0.689,
+            "subprocesses": 15,
+            "statuses": {
+              "completed_unreviewed": 15
+            },
+            "ledger": {}
+          },
+          "swarm_review": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 2343.5,
+            "avg_steps": 4.6,
+            "escalations": 0,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 1.305,
+            "subprocesses": 35,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              }
+            }
+          },
+          "swarm_consensus": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 3522.3,
+            "avg_steps": 7.0,
+            "escalations": 1,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 1.339,
+            "subprocesses": 35,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              },
+              "sampler": {
+                "accuracy": 0.9,
+                "decisions": 18
+              },
+              "static": {
+                "accuracy": 0.8,
+                "decisions": 18
+              }
+            }
+          }
+        },
+        "resilience": {
+          "single_reviewer_adversarial": {
+            "success_rate": 0.0,
+            "approved_rate": 1.0,
+            "false_approvals": 15,
+            "avg_revisions": 1.0,
+            "avg_tokens": 3892.5,
+            "avg_steps": 7.0,
+            "escalations": 0,
+            "verdict_accuracy": 0.0,
+            "decisions": 30,
+            "wall_s": 1.825,
+            "subprocesses": 54,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "rogue": {
+                "accuracy": 0.969,
+                "decisions": 30
+              }
+            }
+          },
+          "naive_majority_adversarial": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.133,
+            "avg_tokens": 4255.7,
+            "avg_steps": 7.8,
+            "escalations": 0,
+            "verdict_accuracy": 0.941,
+            "decisions": 17,
+            "wall_s": 0.446,
+            "subprocesses": 4,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.895,
+                "decisions": 17
+              },
+              "rogue": {
+                "accuracy": 0.105,
+                "decisions": 17
+              },
+              "sampler": {
+                "accuracy": 0.947,
+                "decisions": 17
+              },
+              "static": {
+                "accuracy": 0.842,
+                "decisions": 17
+              }
+            }
+          },
+          "majority_adversarial": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 4450.1,
+            "avg_steps": 8.2,
+            "escalations": 18,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 0.414,
+            "subprocesses": 1,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              },
+              "rogue": {
+                "accuracy": 0.05,
+                "decisions": 18
+              },
+              "sampler": {
+                "accuracy": 0.9,
+                "decisions": 18
+              },
+              "static": {
+                "accuracy": 0.8,
+                "decisions": 18
+              }
+            }
+          },
+          "weighted_adversarial": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 4429.8,
+            "avg_steps": 8.2,
+            "escalations": 4,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 0.234,
+            "subprocesses": 0,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              },
+              "rogue": {
+                "accuracy": 0.05,
+                "decisions": 18
+              },
+              "sampler": {
+                "accuracy": 0.9,
+                "decisions": 18
+              },
+              "static": {
+                "accuracy": 0.8,
+                "decisions": 18
+              }
+            }
+          },
+          "quorum_adversarial": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 4456.1,
+            "avg_steps": 8.2,
+            "escalations": 18,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 0.23,
+            "subprocesses": 0,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              },
+              "rogue": {
+                "accuracy": 0.05,
+                "decisions": 18
+              },
+              "sampler": {
+                "accuracy": 0.9,
+                "decisions": 18
+              },
+              "static": {
+                "accuracy": 0.8,
+                "decisions": 18
+              }
+            }
+          },
+          "weighted_always_approve": {
+            "success_rate": 0.933,
+            "approved_rate": 1.0,
+            "false_approvals": 1,
+            "avg_revisions": 0.2,
+            "avg_tokens": 4094.4,
+            "avg_steps": 8.2,
+            "escalations": 3,
+            "verdict_accuracy": 1.0,
+            "decisions": 18,
+            "wall_s": 0.222,
+            "subprocesses": 0,
+            "statuses": {
+              "approved": 15
+            },
+            "ledger": {
+              "exec": {
+                "accuracy": 0.95,
+                "decisions": 18
+              },
+              "rogue": {
+                "accuracy": 0.8,
+                "decisions": 18
+              },
+              "sampler": {
+                "accuracy": 0.9,
+                "decisions": 18
+              },
+              "static": {
+                "accuracy": 0.8,
+                "decisions": 18
+              }
+            }
+          }
+        },
+        "total_wall_s": 7.89
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p09",
+      "title": "Trajectory Eval CI Gate",
+      "ok": true,
+      "wall_s": 3.37,
+      "fingerprint": "4ca9354604b85881",
+      "metrics": {
+        "grading": {
+          "trajectories": 200,
+          "steps": 1936,
+          "trajectories_per_sec": 10674.8,
+          "steps_per_sec": 103332.3,
+          "alignment_vs_ground_truth_agreement": 1.0
+        },
+        "judge": {
+          "n_labels": 160,
+          "positive_rate": 0.4437,
+          "raw_score_mean_pos": 0.9488,
+          "raw_score_mean_neg": 0.8461,
+          "llm_protocol_path_matches_heuristic": true,
+          "llm_protocol_judgements_per_sec": 3331.6,
+          "platt": {
+            "kappa_pre": 0.0,
+            "kappa_post_cv": 0.5335,
+            "acc_pre": 0.4437,
+            "acc_post_cv": 0.7625,
+            "ece_pre": 0.4479,
+            "ece_post_cv": 0.1135,
+            "brier_pre": 0.409,
+            "brier_post_cv": 0.1913
+          },
+          "isotonic": {
+            "kappa_pre": 0.0,
+            "kappa_post_cv": 0.5335,
+            "acc_pre": 0.4437,
+            "acc_post_cv": 0.7625,
+            "ece_pre": 0.4479,
+            "ece_post_cv": 0.1135,
+            "brier_pre": 0.409,
+            "brier_post_cv": 0.1883
+          }
+        },
+        "regression_detection": {
+          "scenarios": 64,
+          "noise_only": 32,
+          "injected": 32,
+          "runs_per_suite": 80,
+          "stat_gate": {
+            "precision": 1.0,
+            "recall": 0.9375,
+            "false_positive_rate": 0.0,
+            "tp": 30,
+            "fp": 0,
+            "fn": 2,
+            "tn": 32
+          },
+          "naive_mean_delta_gate": {
+            "precision": 0.6667,
+            "recall": 1.0,
+            "false_positive_rate": 0.5,
+            "tp": 32,
+            "fp": 16,
+            "fn": 0,
+            "tn": 16
+          },
+          "stat_gate_recall_by_injection": {
+            "drop_required_step": 1.0,
+            "forbidden_action": 0.75,
+            "token_bloat": 1.0,
+            "reordering": 1.0
+          }
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p10",
+      "title": "Inter-Agent Security Proxy",
+      "ok": true,
+      "wall_s": 0.85,
+      "fingerprint": "546474f4e6367e06",
+      "metrics": {
+        "injection_dev": {
+          "n_attacks": 71,
+          "n_benign": 66,
+          "tp": 71,
+          "fp": 0,
+          "fn": 0,
+          "tn": 66,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "false_positive_rate": 0.0
+        },
+        "injection_heldout": {
+          "n_attacks": 25,
+          "n_benign": 25,
+          "tp": 21,
+          "fp": 0,
+          "fn": 4,
+          "tn": 25,
+          "precision": 1.0,
+          "recall": 0.84,
+          "f1": 0.913,
+          "false_positive_rate": 0.0
+        },
+        "injection_combined": {
+          "n_attacks": 96,
+          "n_benign": 91,
+          "tp": 92,
+          "fp": 0,
+          "fn": 4,
+          "tn": 91,
+          "precision": 1.0,
+          "recall": 0.9583,
+          "f1": 0.9787,
+          "false_positive_rate": 0.0
+        },
+        "obfuscated_recall": 1.0,
+        "n_obfuscated": 18,
+        "pii": {
+          "recall_per_type": {
+            "EMAIL": 1.0,
+            "PHONE": 1.0,
+            "CREDIT_CARD": 1.0,
+            "SSN": 1.0,
+            "IP_ADDRESS": 1.0,
+            "IBAN": 1.0,
+            "API_KEY": 1.0,
+            "PERSON": 1.0
+          },
+          "recall_overall": 1.0,
+          "n_labelled_values": 46,
+          "unexpected_detections_in_samples": 0,
+          "negatives_flagged": 0,
+          "n_negatives": 10
+        },
+        "pii_heldout": {
+          "recall_per_type": {
+            "EMAIL": 1.0,
+            "PHONE": 1.0,
+            "CREDIT_CARD": 1.0,
+            "SSN": 1.0,
+            "IP_ADDRESS": 1.0,
+            "IBAN": 1.0,
+            "API_KEY": 1.0,
+            "PERSON": 1.0
+          },
+          "recall_overall": 1.0,
+          "n_labelled_values": 13,
+          "unexpected_detections_in_samples": 0,
+          "negatives_flagged": 0,
+          "n_negatives": 10
+        },
+        "latency": {
+          "messages": 525,
+          "route_ms_mean": 0.517,
+          "route_ms_p50": 0.463,
+          "route_ms_p95": 0.941,
+          "scan_ms_mean": 0.331,
+          "audit_chain_valid": true
+        }
+      },
+      "reproducible": true
+    },
+    {
+      "project": "p11",
+      "title": "Semantic Cache + Routing Gateway",
+      "ok": true,
+      "wall_s": 0.42,
+      "fingerprint": "029940e3f5609f69",
+      "metrics": {
+        "workload": {
+          "requests": 500,
+          "distinct_intents": 161,
+          "tier_mix": {
+            "moderate": 174,
+            "simple": 243,
+            "complex": 83
+          }
+        },
+        "main": {
+          "requests": 500,
+          "success_rate": 1.0,
+          "cost_usd": 0.134059,
+          "cache_hit_rate": 0.474,
+          "false_hit_rate": 0.0,
+          "false_hits": 0,
+          "routing_distribution": {
+            "claude-sonnet-5-5": 77,
+            "claude-haiku-5-5": 117,
+            "claude-opus-5-5": 69
+          },
+          "routing_accuracy_vs_labels": 0.9962,
+          "latency_ms": {
+            "p50": 316.5,
+            "p95": 1625.1,
+            "p99": 2005.8
+          },
+          "baseline_always_opus_usd": 0.509404,
+          "savings_vs_baseline_pct": 73.68
+        },
+        "ablations": {
+          "router_only_savings_pct": 58.52,
+          "cache_only_savings_pct": 46.76
+        },
+        "degradation": {
+          "requests": 500,
+          "success_rate": 0.998,
+          "cost_usd": 0.084309,
+          "cache_hit_rate": 0.472,
+          "false_hit_rate": 0.0,
+          "false_hits": 0,
+          "routing_distribution": {
+            "claude-sonnet-5-5": 122,
+            "claude-haiku-5-5": 131,
+            "claude-opus-5-5": 10
+          },
+          "routing_accuracy_vs_labels": 0.9962,
+          "latency_ms": {
+            "p50": 305.0,
+            "p95": 1148.2,
+            "p99": 1584.3
+          },
+          "fallbacks": 70,
+          "served_from_cache_after_failures": 0,
+          "hard_errors": 1,
+          "breaker_trips": {
+            "claude-haiku-5-5": 0,
+            "claude-sonnet-5-5": 0,
+            "claude-opus-5-5": 21
+          },
+          "attempt_outcomes": {
+            "ok": 263,
+            "unavailable": 38,
+            "rate_limited": 1,
+            "skipped_open_breaker": 45
+          }
+        },
+        "kill_switch": {
+          "initech_daily_cap_usd": 0.005,
+          "initech_spend_usd": 0.004996,
+          "initech_requests": 104,
+          "initech_rejected": 44,
+          "initech_rejected_but_served_from_cache": 1,
+          "tracker_decisions_pre_routing": {
+            "ok": 310,
+            "downgrade": 190,
+            "reject": 0
+          },
+          "gateway_rejected_total": 44,
+          "gateway_downgraded_total": 114,
+          "rate_breaker_trips": 2,
+          "total_cost_usd": 0.088929
+        }
+      },
+      "reproducible": true
+    }
+  ]
+}

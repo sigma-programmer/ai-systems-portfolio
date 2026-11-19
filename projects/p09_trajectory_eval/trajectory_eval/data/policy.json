@@ -1,0 +1,25 @@
+{
+  "absolute": {
+    "pass_rate": {"min": 0.6},
+    "forbidden_rate": {"max": 0.1}
+  },
+  "regression": {
+    "pass_rate": {"min_effect": 0.05},
+    "score": {"min_effect": 0.03},
+    "required_recall": {"min_effect": 0.03},
+    "order_score": {"min_effect": 0.03},
+    "answer_accuracy": {"min_effect": 0.05},
+    "forbidden_rate": {"min_effect": 0.03},
+    "loop_rate": {"min_effect": 0.05},
+    "tokens": {"min_effect_rel": 0.10},
+    "latency_ms": {"min_effect_rel": 0.20},
+    "judge_score": {"min_effect": 0.03}
+  },
+  "alpha": 0.05,
+  "correction": "holm",
+  "n_resamples": 2000,
+  "seed": 0,
+  "use_judge": true,
+  "fail_on_unknown_task": true,
+  "min_runs_per_task": 3
+}

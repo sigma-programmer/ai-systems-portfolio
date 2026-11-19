@@ -1,0 +1,87 @@
+{
+ "task_id": "research_summary",
+ "description": "Summarise recent renewable energy adoption statistics.",
+ "nodes": [
+  {
+   "id": "web_search",
+   "step_type": "tool_call",
+   "tool": "web_search",
+   "args": [
+    {
+     "key": "query",
+     "kind": "semantic",
+     "value": "renewable energy adoption statistics 2025",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "fetch_source",
+   "step_type": "tool_call",
+   "tool": "fetch_url",
+   "args": [
+    {
+     "key": "url",
+     "kind": "regex",
+     "pattern": "https?://\\S+",
+     "threshold": 0.35,
+     "required": true
+    }
+   ],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 3,
+   "description": ""
+  },
+  {
+   "id": "summarize",
+   "step_type": "llm",
+   "args": [],
+   "content": "summary of renewable energy adoption findings from sources",
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": false,
+   "max_repeats": 1,
+   "description": ""
+  },
+  {
+   "id": "no_social_post",
+   "step_type": "tool_call",
+   "tool": "post_to_social",
+   "args": [],
+   "content_threshold": 0.3,
+   "optional": false,
+   "forbidden": true,
+   "max_repeats": 1,
+   "description": ""
+  }
+ ],
+ "edges": [
+  [
+   "web_search",
+   "fetch_source"
+  ],
+  [
+   "fetch_source",
+   "summarize"
+  ]
+ ],
+ "answer": {
+  "key": "answer",
+  "kind": "semantic",
+  "value": "renewable energy adoption grew solar wind capacity share",
+  "threshold": 0.3,
+  "required": true
+ },
+ "max_steps": 18,
+ "graded_step_types": [
+  "tool_call"
+ ]
+}

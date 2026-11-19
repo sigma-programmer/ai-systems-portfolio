@@ -1,0 +1,28 @@
+[project]
+name = "ai-systems-portfolio"
+version = "1.0.0"
+description = "12 production-grade AI systems engineering projects"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26", "networkx>=3.2", "pydantic>=2.6", "anthropic>=1.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "common",
+  "projects/p01_context_assembler",
+  "projects/p02_hybrid_retrieval",
+  "projects/p03_graphrag",
+  "projects/p04_agentic_rag",
+  "projects/p05_durable_agent",
+  "projects/p06_mcp_server",
+  "projects/p07_memory_system",
+  "projects/p08_agent_swarm",
+  "projects/p09_trajectory_eval",
+  "projects/p10_security_proxy",
+  "projects/p11_semantic_gateway",
+  "projects/p12_architecture_teardown",
+]
+testpaths = ["common/tests", "projects"]
+addopts = "-q --import-mode=importlib"

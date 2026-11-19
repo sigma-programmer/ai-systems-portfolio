@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p03 · GraphRAG Knowledge Pipeline</title><style>
+:root{--bg:#fbfaf7;--fg:#1d1d1b;--muted:#6b6a65;--line:#e4e1d8;--card:#ffffff;--accent:#c2410c;--code:#f3f1ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}}
+:root[data-theme=dark]{--bg:#161614;--fg:#ecebe6;--muted:#a19f97;--line:#33322e;--card:#1e1e1b;--accent:#fb923c;--code:#24231f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:32px 16px 80px}nav{border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0 .4em}h2{margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{margin-top:1.6em}
+a{color:var(--accent)}code{background:var(--code);padding:.1em .35em;border-radius:4px;font-size:.88em}
+pre{background:var(--code);padding:14px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.45}pre code{background:none;padding:0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);text-align:center}
+.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}th,td{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:.2em 1em;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 4px;font-size:1rem}.card p{margin:0;color:var(--muted);font-size:14px}.card a{text-decoration:none}
+</style></head><body><nav><a href="index.html">Index</a><a href="architecture.html">Architecture</a><a href="cost.html">Cost</a><a href="benchmarks.html">Benchmarks</a><a href="adrs.html">ADRs</a></nav><main><h1 id="p03-graphrag-knowledge-pipeline">p03 · GraphRAG Knowledge Pipeline</h1>
+<blockquote>You can make AI reason across connected data.</blockquote>
+<h2 id="the-problem">The problem</h2>
+<p>"Who is the CEO of the company that acquired Lumen Labs?" Vector RAG retrieves chunks similar to the <em>question</em>, but the bridging entity (the acquirer) never appears in the question. So the second hop is retrieved by luck or not at all.</p>
+<h2 id="architecture">Architecture</h2>
+<pre class="mermaid">flowchart LR
+    T[&quot;raw docs&quot;] --&gt; C[&quot;chunker&quot;]
+    C --&gt; E[&quot;entity extraction (pattern / gazetteer or LLM JSON)&quot;]
+    C --&gt; R[&quot;relation extraction (verb patterns + co-occurrence)&quot;]
+    E --&gt; ER[&quot;entity resolution: aliases, suffixes, fuzzy&quot;]
+    R --&gt; G[(&quot;networkx KG + provenance&quot;)]
+    ER --&gt; G
+    G --&gt; CM[&quot;community detection, 2 levels&quot;]
+    CM --&gt; CS[&quot;community summaries&quot;]
+    G --&gt; L[&quot;local search: anchor + typed multi-hop path&quot;]
+    CS --&gt; GL[&quot;global search: map-reduce&quot;]</pre>
+<p>Every node and edge keeps the IDs of its source chunks, so each answer comes with the path it walked and the passages that justify each hop.</p>
+<h2 id="results-26-docs-26-questions-22-of-them-multi-hop">Results (26 docs, 26 questions, 22 of them multi-hop)</h2>
+<div class="table-wrap"><table><thead><tr><th>System</th><th>Overall acc.</th><th>Multi-hop acc.</th><th>2-hop</th><th>3-hop</th><th>Support-doc recall</th><th>Context tokens</th></tr></thead><tbody><tr><td>Vector RAG top-3</td><td>0.27</td><td>0.14</td><td>0.13</td><td>0.17</td><td>0.58</td><td>176</td></tr><tr><td>Vector RAG top-5</td><td>0.27</td><td>0.14</td><td>0.13</td><td>0.17</td><td>0.69</td><td>289</td></tr><tr><td><strong>GraphRAG local</strong></td><td><strong>1.00</strong></td><td><strong>1.00</strong></td><td><strong>1.00</strong></td><td><strong>1.00</strong></td><td><strong>1.00</strong></td><td><strong>128</strong></td></tr></tbody></table></div>
+<p>Index build: 38 nodes, 80 edges (54 typed, 26 co-occurrence), 10 then 7 communities, in about 13 ms.</p>
+<p>Takeaways:</p>
+<ul><li><strong>Widening k does not fix multi-hop.</strong> Going from top-3 to top-5 raises support-doc recall (0.58 to 0.69), but answer accuracy stays flat at 0.14. The model needs the <em>chain</em>, not more chunks.</li><li><strong>The graph uses <em>fewer</em> tokens.</strong> A typed path plus its provenance chunks is a more compact context (128 tokens) than five similar-looking chunks (289 tokens).</li><li>Single-hop questions are a tie (1.0 for both), so GraphRAG's advantage is specifically on connected reasoning.</li></ul>
+<h2 id="honest-caveats">Honest caveats</h2>
+<ul><li>Extraction precision and recall against gold are both 1.0 because the bundled corpus is written in the relation patterns the offline extractor knows. On messy real text, the pattern extractor's recall would drop sharply, and the <code>LLMExtractor</code> path is the production choice. <strong>The pipeline result to take away is "given a correct graph, multi-hop becomes trivial and explainable"</strong>; extraction quality is the real bottleneck.</li><li>At this scale networkx is fine. Past millions of edges you would move to a graph store, and the ADR records why we didn't.</li></ul>
+<p>See ADR-0004.</p></main><script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";mermaid.initialize({startOnLoad:true,theme:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"neutral"});</script></body></html>
